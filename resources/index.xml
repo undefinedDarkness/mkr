@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+	<gresource prefix="/undefinedDarkness/colr">
+		<file compressed="true">placeholder.png</file>
+		<file compressed="true">emma.png</file>
+		<file>app.css</file>
+	</gresource>
+	<gresource prefix="/undefinedDarkness/colr/icons/16x16/actions/">
+		<file preprocess="xml-stripblanks" alias="color-picker-button-symbolic.svg">icons/color-picker-button.svg</file>
+		<file preprocess="xml-stripblanks" alias="copy-button-symbolic.svg">icons/copy-button.svg</file>
+	</gresource>
+</gresources>

@@ -1,0 +1,8 @@
+[options]
+buildtype = debug
+backend = ninja
+b_sanitize = none
+c_args = -g
+
+[properties]
+

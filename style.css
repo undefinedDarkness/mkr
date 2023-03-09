@@ -1,0 +1,38 @@
+/* https://developer-old.gnome.org/gtk3/stable/chap-css-overview.html 
+ * https://developer-old.gnome.org/gtk3/unstable/chap-css-properties.html*/
+
+progress, trough {
+	min-height: 32px;
+}
+
+progressbar trough progress {
+	background-image: linear-gradient(to right, #c6ffdd, #fbd786, #f7797d);
+}
+
+window {
+    background-color: #221529;
+	font-family: "Liberation Sans";
+}
+
+.display box.selected {
+	background: #4b5561;
+}
+
+entry {
+	border-radius: 0;
+}
+
+window label {
+	color: #fafafa ;
+}
+
+.mode {
+	background-color: #d64562 ;
+	color: #fafafa ;
+	padding: 8px;
+	font-weight: bolder;
+}
+
+.display box {
+	padding: 0 18px;
+}
