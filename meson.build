@@ -18,7 +18,8 @@ src = [
   'src/modes/dl.c',
   'src/app.c',
   'src/layout.c',
-  'src/modes/app.c'
+  'src/modes/app.c',
+  'src/ui-behaviour.c'
   # resources
 ]
 

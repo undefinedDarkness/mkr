@@ -9,6 +9,8 @@ typedef struct {
     GtkWidget *input;
     GtkWidget *display;
 	GtkWidget *mode;
+	GtkWidget *scroll;
+	GtkWidget *favourites;
 } UI;
 
 typedef struct {

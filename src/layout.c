@@ -17,7 +17,7 @@ void update_progress(float v, void *ptr) {
   static GtkWidget *progress;
   // NOTE: v is a fraction not a percentage
   if (v == 0) {
-    AUTO scroll = gtk_widget_get_parent(gtk_widget_get_parent(app->ui.display));
+    AUTO scroll = app->ui.scroll;
     progress = gtk_progress_bar_new();
     gtk_widget_set_vexpand(progress, true);
     gtk_widget_set_valign(progress, GTK_ALIGN_FILL);
@@ -83,10 +83,16 @@ void scaffold(GtkWidget *window, APP_MUT) {
   CLASS(mode, "mode");
   ADD(layout, mode);
 
+
+
   AUTO input = gtk_entry_new();
   g_signal_connect(input, "key-press-event", on_input_key_press, app);
   gtk_box_pack_start(layout, input, false, false, 0);
 
+  AUTO favourites = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+  CLASS(favourites, "favourites");
+  ADD(layout, favourites);
+  
   AUTO scroll = gtk_scrolled_window_new(NULL, NULL);
   gtk_scrolled_window_set_policy(scroll, GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS);
   gtk_widget_hide(gtk_scrolled_window_get_vscrollbar(scroll));
@@ -98,5 +104,5 @@ void scaffold(GtkWidget *window, APP_MUT) {
   ADD(scroll, display);
 
   app->ui =
-      (UI){.window = window, .input = input, .mode = mode, .display = display};
+      (UI){.window = window, .scroll = scroll, .favourites = favourites, .input = input, .mode = mode, .display = display};
 }

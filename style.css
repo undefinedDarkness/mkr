@@ -1,6 +1,12 @@
 /* https://developer-old.gnome.org/gtk3/stable/chap-css-overview.html 
  * https://developer-old.gnome.org/gtk3/unstable/chap-css-properties.html*/
 
+.favourites {
+	background-color: skyblue;
+	color: white;
+	padding: 0 18px;
+}
+
 progress, trough {
 	min-height: 32px;
 }

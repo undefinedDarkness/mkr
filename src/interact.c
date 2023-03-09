@@ -1,39 +1,8 @@
 #include "app.h"
 #include "modes/mode.h"
+#include <stdio.h>
 
-// Expecting following structure:
-// ScrolledWindow
-// 	-> Viewport
-// 		-> Container (ANY)
-// 			-> Child
-static bool is_visible_in_parent(GtkWidget *child) {
-  AUTO scrolled = gtk_widget_get_parent(
-      gtk_widget_get_parent(gtk_widget_get_parent(child)));
-  int x, y;
-  GtkAllocation child_alloc, scroll_alloc;
-  gtk_widget_translate_coordinates(child, scrolled, 0, 0, &x, &y);
-  gtk_widget_get_allocation(child, &child_alloc);
-  gtk_widget_get_allocation(scrolled, &scroll_alloc);
-
-  return (x >= 0 && y >= 0) && x + child_alloc.width <= scroll_alloc.width &&
-         y + child_alloc.height <= scroll_alloc.height;
-}
-
-static void scroll_to_widget(GtkWidget *focused) {
-  AUTO container = gtk_widget_get_parent(focused);
-  AUTO scrolled = gtk_widget_get_parent(gtk_widget_get_parent(container));
-
-  GtkAdjustment *hadj =
-      gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(scrolled));
-  gint x, y;
-  gtk_widget_translate_coordinates(focused, container, 0, 0, &x, &y);
-  gtk_adjustment_set_value(hadj, MIN(x, gtk_adjustment_get_upper(hadj)));
-}
-
-static void ensureVisible(GtkWidget *child) {
-  if (!is_visible_in_parent(child))
-    scroll_to_widget(child);
-}
+void ensureVisible(void*);
 
 // can be called quite often, would be good, if it is quick.
 void update_selected(int new, APP_MUT) {
@@ -75,6 +44,16 @@ void fill_display(APP_MUT) {
   g_list_foreach(children, gtk_widget_destroy, NULL);
   g_list_free(children);
 
+	AUTO favouritesDisplay = app->ui.favourites;
+	size_t favouritesLen;
+	GError *err = NULL;
+	AUTO favouritesLabels = g_key_file_get_string_list(app->config, "FAVOURITES", "APP", &favouritesLen, &err);
+
+	// printf("FAVOURITES %s:\n", err == NULL ? "" : err->message);
+	for (int i = 0; i < favouritesLen; i++) {
+		printf("%s\n",favouritesLabels[i]);
+	}
+
   while (list->next != NULL) {
     Result *res = list->data;
 
@@ -89,15 +68,27 @@ void fill_display(APP_MUT) {
     gtk_image_set_pixel_size(icon, 24);
     gtk_box_pack_start(item, icon, 0, 0, 0);
 
-    ADD(display, item);
-    // WARN: Memory leak, list->data should be freed.
     list = list->next;
+	
+	// TODO: Rework this code
+	for (int i = 0; i < favouritesLen; i++) {
+		if (g_strcmp0(res->label, favouritesLabels[i]) == 0) {
+			ADD(favouritesDisplay, item);
+			printf("Adding %p to favourites list\n", item);
+			break;
+		}
+	}
+
+	if (gtk_widget_get_parent(item) == NULL)
+		ADD(display, item);
+    // WARN: Memory leak, list->data should be freed.
   }
 
   // for 1st label
   CLASS(gtk_container_get_children(display)->data, "selected");
-
+	g_strfreev(favouritesLabels);
   gtk_widget_show_all(display);
+  gtk_widget_show_all(favouritesDisplay);
   g_list_free(list);
 }
 
@@ -113,7 +104,7 @@ void update_mode(char p, APP_MUT) {
 
       AUTO display = app->ui.display;
       AUTO layout = gtk_widget_get_parent(app->ui.mode);
-      AUTO scroll = gtk_widget_get_parent(gtk_widget_get_parent(display));
+      AUTO scroll = app->ui.scroll;
       // Clear all children
       AUTO children = gtk_container_get_children(display);
       g_list_foreach(children, gtk_widget_destroy, NULL);
