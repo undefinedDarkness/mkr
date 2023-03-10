@@ -15,13 +15,39 @@ progressbar trough progress {
 	background-image: linear-gradient(to right, #c6ffdd, #fbd786, #f7797d);
 }
 
-window {
-    background-color: #221529;
+window,.layout {
+	background: transparent;
+}
+
+window, row {
 	font-family: "Liberation Sans";
 }
 
-.display box.selected {
-	background: #4b5561;
+.display {
+
+    background-color: #221529;
+}
+
+row:selected {
+	background: red;
+}
+
+row {
+	padding: 8px;
+}
+
+.mode {
+	padding: 16px 20px;
+	font-size: 32px;
+}
+
+row box label{
+	font-size: 18px;
+}
+
+window scrolledwindow {
+	min-height: 500px;
+	min-width: 400px;
 }
 
 entry {
@@ -32,13 +58,16 @@ window label {
 	color: #fafafa ;
 }
 
-.mode {
+.APP {
 	background-color: #d64562 ;
-	color: #fafafa ;
-	padding: 8px;
-	font-weight: bolder;
 }
 
-.display box {
-	padding: 0 18px;
+.DL {
+	background-color: #f2735c;
+}
+
+.mode {
+	color: #fafafa ;
+	padding: 16px;
+	font-weight: bolder;
 }

@@ -14,12 +14,14 @@ gnome = import('gnome')
 # )
 
 src = [
-  'src/interact.c',
-  'src/modes/dl.c',
+  'src/mode-change.c',
+'src/interact.c',
+  'src/sort.c',
+'src/modes/dl.c',
   'src/app.c',
   'src/layout.c',
   'src/modes/app.c',
-  'src/ui-behaviour.c'
+  'src/selection.c'
   # resources
 ]
 

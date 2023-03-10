@@ -22,8 +22,12 @@ typedef struct {
 
 #define APP const State *const app
 #define APP_MUT State *const app
+void modeInit(APP_MUT);
+int sort(GtkWidget*a,GtkWidget*b,APP);
 void scaffold(GtkWidget*, APP_MUT);
 void fill_display(APP_MUT); 
+// void sort_display(APP_MUT);
+void update_selected(int new, APP);
 
 #define C_GET(g, k, type, default) g_key_file_has_key(app->config, g, k, NULL) ? g_key_file_get_##type(app->config, g, k, NULL) : default
 

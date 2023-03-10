@@ -19,14 +19,18 @@ typedef struct {
 
 
 typedef struct {
-	char* label; // MUST BE UNIQUE
+   struct {
+	   char* symbol; // TODO: Allow any image
+		enum ModeType type;
+		uint32_t color;
+	} metadata;
+	char* label; 
 	GList *(*generate)();
 	union {
 		void (*execute)(Result);
 		void (*execute_command)(const char*);
 		void (*execute_command_with_progress)(const char*,void*);
 	};
-	enum ModeType type;
 } Mode;
 
 GList* app_mode_generate();
@@ -34,16 +38,22 @@ void app_mode_execute(Result);
 
 void dl_execute(const char* url, void*);
 
-static Mode modes[] = {
+const static Mode modes[] = {
 	{
+		.metadata = {
+			.symbol = "🚀",
+			.type = ITEMS,
+		},
 		.label = "APP",
-		.type = 0 | ITEMS,
 		.generate = app_mode_generate,
 		.execute = app_mode_execute
 	},
 	{
+		.metadata = {
+			.symbol = "💾",
+			.type = PROGRESS | COMMAND,
+		},
 		.label = "DL",
-		.type = 0 | PROGRESS | COMMAND,
 		.generate = NULL,
 		.execute_command_with_progress = dl_execute
 	}
