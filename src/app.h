@@ -22,7 +22,9 @@ typedef struct {
 
 #define APP const State *const app
 #define APP_MUT State *const app
+
 void modeInit(APP_MUT);
+void execute(APP);
 int sort(GtkWidget*a,GtkWidget*b,APP);
 void scaffold(GtkWidget*, APP_MUT);
 void fill_display(APP_MUT); 

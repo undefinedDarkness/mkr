@@ -7,13 +7,20 @@ static void modeItems(APP_MUT) {
 	CLASS(display, "display");
 	// g_print("Adding child to scroll!!\n");
 	ADD(app->ui.scroll, display);
+	CLASS(app->ui.scroll, "items");
 	app->ui.display = display;
 	fill_display(app);
 	gtk_widget_show(app->ui.scroll);
 }
 
 static void modeCommand(APP_MUT) {
+	gtk_style_context_remove_class(gtk_widget_get_style_context(app->ui.scroll), "items");
 	gtk_widget_hide(app->ui.scroll);
+	gtk_window_resize(app->ui.window, 1, 1);
+
+	if (app->currentMode.metadata.type & PROGRESS) {
+		
+	}
 }
 
 static void updateModeLabel(APP) {

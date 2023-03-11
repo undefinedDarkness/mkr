@@ -16,13 +16,14 @@ gnome = import('gnome')
 src = [
   'src/mode-change.c',
 'src/interact.c',
-  'src/sort.c',
+'src/execute.c',
+'src/sort.c',
 'src/modes/dl.c',
-  'src/app.c',
-  'src/layout.c',
-  'src/modes/app.c',
-  'src/selection.c'
-  # resources
+'src/app.c',
+'src/layout.c',
+'src/modes/app.c',
+'src/selection.c'
+# resources
 ]
 
 executable('colr', sources : src, dependencies : deps, install : true)
