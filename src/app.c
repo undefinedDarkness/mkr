@@ -1,42 +1,19 @@
-#include "modes/mode.h"app
+#include "modes/mode.h"
 #include "app.h"
 
-void run_tests() {
-	GList* r = app_mode_generate();
-	while(r->next != NULL) {
-		Result* res = r->data;
-		printf("NAME: %s\nEXE: %s\n\n", res->label, res->metadata);
-		r = r->next;
-	}
-	exit(0);
-}
-
-// gboolean supports_alpha = FALSE;
-static void window_on_screen_changed(GtkWidget *widget, GdkScreen *old_screen, gpointer userdata)
-{
-    /* To check if the display supports alpha channels, get the visual */
-    GdkScreen *screen = gtk_widget_get_screen(widget);
-    GdkVisual *visual = gdk_screen_get_rgba_visual(screen);
-
-    if (!visual)
-    {
-        printf("Your screen does not support alpha channels!\n");
-        visual = gdk_screen_get_system_visual(screen);
-        // supports_alpha = FALSE;
-    }
-    else
-    {
-        printf("Your screen supports alpha channels!\n");
-        // supports_alpha = TRUE;
-    }
-
-    gtk_widget_set_visual(widget, visual);
-}
 
 int main(int argc, char** argv) {
 	gtk_init(&argc, &argv);
     
 	State* app = malloc(sizeof(State));
+	
+	app->api = (Api_t){
+		.update_progress = async_update_progress,
+		.insert_item = async_insert_item,
+		.data = app,
+		.insert_item_single = async_insert_item_single 
+	};
+
 	app->selectedItem = -1;
 	app->config = g_key_file_new();
     g_key_file_load_from_file(app->config, "config.ini", G_KEY_FILE_NONE, NULL);
@@ -80,7 +57,7 @@ int main(int argc, char** argv) {
 
 
 	// Rest of mode init
-	modeInit(app);
+	modeInit(modes[0], app);
 
 	gtk_widget_show_all(window);
 

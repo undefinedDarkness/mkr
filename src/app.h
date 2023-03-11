@@ -18,16 +18,20 @@ typedef struct {
 	GKeyFile *config;
 	Mode currentMode;
 	int selectedItem;
+	Api_t api;
 } State;
 
 #define APP const State *const app
 #define APP_MUT State *const app
 
-void modeInit(APP_MUT);
+ void async_update_progress(float v, void *ptr);
+void modeInit(Mode, APP_MUT);
 void execute(APP);
 int sort(GtkWidget*a,GtkWidget*b,APP);
 void scaffold(GtkWidget*, APP_MUT);
-void fill_display(APP_MUT); 
+
+// void async_insert_item_single(struct { Result res; APP;  }*i);
+void async_insert_item(GList* list, APP);
 // void sort_display(APP_MUT);
 void update_selected(int new, APP);
 

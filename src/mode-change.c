@@ -1,16 +1,16 @@
 #include "app.h"
+#include "modes/mode.h"
 
 static void modeItems(APP_MUT) {
 	AUTO display = gtk_list_box_new();
 	gtk_list_box_set_sort_func(display, sort, app, NULL);
 	gtk_list_box_set_selection_mode(display, GTK_SELECTION_SINGLE);
 	CLASS(display, "display");
-	// g_print("Adding child to scroll!!\n");
 	ADD(app->ui.scroll, display);
 	CLASS(app->ui.scroll, "items");
 	app->ui.display = display;
-	fill_display(app);
-	gtk_widget_show(app->ui.scroll);
+	app->currentMode.generate(&app->api);
+	gtk_widget_show_all(app->ui.scroll);
 }
 
 static void modeCommand(APP_MUT) {
@@ -23,7 +23,7 @@ static void modeCommand(APP_MUT) {
 	}
 }
 
-static void updateModeLabel(APP) {
+static bool updateModeLabel(APP) {
 	gtk_label_set_text(app->ui.mode, app->currentMode.metadata.symbol);
 	AUTO modeStyleCtx = gtk_widget_get_style_context(app->ui.mode);
 	for (int i = 0; i < sizeof(modes)/sizeof(modes[0]); i++)
@@ -31,15 +31,41 @@ static void updateModeLabel(APP) {
 	gtk_style_context_add_class(modeStyleCtx, app->currentMode.label);
 }
 
-void modeInit(APP_MUT) {
+static void modeItemCleanup(APP) {
+	
+	AUTO children = gtk_container_get_children(app->ui.display);
+	AUTO head = children;
+	
+	while (children->next != NULL) {
+		AUTO child = children->data;
+		Result *result = g_object_get_data(child, "__resptr");
+
+		if (result->metadata!=NULL)
+			free(result->metadata);
+		if (result->icon != NULL)
+			g_object_unref(result->icon);
+		free(result->label);
+		free(result);
+
+		children = children->next; 
+	}
+	g_print("Finished cleaning\n");
+	g_list_free(children);
+}
+
+void modeInit(Mode prevMode, APP_MUT) {
 	// g_print("Changing mode to %s\n", app->currentMode.label);
 	if (GTK_IS_WIDGET(app->ui.display)) {
+		if (prevMode.metadata.type & AUTOCLEAN)
+			modeItemCleanup(app);
 		gtk_container_remove(app->ui.scroll, app->ui.display);
 		// No references to app->ui.display anymore so itll die 
 		app->ui.display = NULL;
 	}
 
 	enum ModeType type = app->currentMode.metadata.type;
+	// g_idle_add(updateModeLabel, app);
+	updateModeLabel(app);
 
 	if (type & ITEMS) {
 		// g_print("Mode is of type items\n");
@@ -50,5 +76,5 @@ void modeInit(APP_MUT) {
 		modeCommand(app);
 	}
 	// g_print("Finished init code\n");
-	g_idle_add(updateModeLabel, app);
+	// g_idle_add_full(gint priority, GSourceFunc function, gpointer data, GDestroyNotify notify)
 }

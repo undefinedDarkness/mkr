@@ -4,6 +4,7 @@ typedef struct {
   void *app;
   float fsize;
   float completed;
+  Api_t api;
   GFileOutputStream *ofstream;
 } DLState;
 
@@ -22,29 +23,32 @@ static void async_read_cb(GInputStream *source, GAsyncResult *res,
 	return;
   }
   state->completed += size;
-  update_progress(state->completed / state->fsize, state->app);
+  state->api.update_progress(state->completed / state->fsize, state->api.data);
+  // async_update_progress(state->completed / state->fsize, state->app);
   g_input_stream_read_bytes_async(source, 1096, G_PRIORITY_DEFAULT, NULL,
                                   async_read_cb, state);
 }
 
-void dl_execute(const char *url, void *app) {
+void dl_execute(const char *url, API) {
   AUTO file = g_file_new_for_uri(url);
   
   AUTO ofile = g_file_new_build_filename(g_get_user_special_dir(G_USER_DIRECTORY_DOWNLOAD), g_file_get_basename(file), NULL);
 
-  update_progress(0.0, app); // run init code
+  // async_update_progress(0.0, app); // run init code
+	api->update_progress(0, api->data);
 
   GError *err = NULL;
   AUTO fstream = g_file_read(file, NULL, &err);
   if (err != NULL) {
     g_print("ERROR WITH READING FILE....");
-    update_progress(100, app);
+	api->update_progress(100, api->data);
+    // async_update_progress(100, app);
     g_object_unref(err);
     return;
   }
  
   DLState *state = malloc(sizeof(DLState));
-  state->app = app;
+  state->api = *api;
   AUTO finfo = g_file_input_stream_query_info(
       fstream, G_FILE_ATTRIBUTE_STANDARD_SIZE, NULL, NULL);
   // g_print("File Size:%lu\n ", g_file_info_get_size(finfo));

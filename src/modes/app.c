@@ -1,10 +1,10 @@
 #include "mode.h"
 
-void app_mode_execute(Result result) {
+void app_mode_execute(const char*const s, Result result) {
 	g_spawn_command_line_async(result.metadata, NULL);
 }
 
-GList* app_mode_generate(int*length) {
+void app_mode_generate(API) {
 	AUTO list = g_app_info_get_all();
 	AUTO head = list;
 
@@ -19,6 +19,6 @@ GList* app_mode_generate(int*length) {
 		list = list->next;
 	}
 
-	return head;
+	api->insert_item(head, api->data);
+	// cb(head,cbd);
 }
-

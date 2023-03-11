@@ -1,4 +1,4 @@
-project('colr', 'c')
+project('mkr', 'c')
 
 # Add Math Library
 cc = meson.get_compiler('c')
@@ -15,14 +15,15 @@ gnome = import('gnome')
 
 src = [
   'src/mode-change.c',
-'src/interact.c',
+'src/insertion.c',
 'src/execute.c',
 'src/sort.c',
 'src/modes/dl.c',
 'src/app.c',
 'src/layout.c',
 'src/modes/app.c',
-'src/selection.c'
+'src/selection.c',
+  'src/modes/emoji.c'
 # resources
 ]
 

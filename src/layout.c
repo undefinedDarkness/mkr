@@ -28,12 +28,13 @@ static bool on_input_key_press(GtkWidget *input, GdkEventKey *key, APP_MUT) {
     if (c == 'V')
       return false;
 
+	Mode prev = app->currentMode;
     for (int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++) {
       if (c == *modes[i].label)
         app->currentMode = modes[i];
     }
 
-    modeInit(app);
+    modeInit(prev, app);
   }
 
   return false; // dont propagate

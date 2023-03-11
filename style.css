@@ -60,15 +60,15 @@ window label {
 	color: #fafafa ;
 }
 
-.APP {
+.header label.APP {
 	background-color: #d64562 ;
 }
 
-.DL {
+.header label.DL {
 	background-color: #f2735c;
 }
 
-.mode {
-	color: #fafafa ;
+.header label {
+	background-color: #000;
 	font-weight: bolder;
 }
