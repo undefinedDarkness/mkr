@@ -43,5 +43,6 @@ For these modes, the `generate` function is never called
 - The GList* generated from `generate()` will be freed but the data within won't be.
 
 ### Future Changes
-`execute_command_with_progress` and `execute_command` join into one function,
-Instead of callbacks being passed from the API side, a single API structure is passed whenever necessary to contain all callbacks
+- ✅ `execute_command_with_progress` and `execute_command` join into one function,
+- ✅ Instead of callbacks being passed from the API side, a single API structure is passed whenever necessary to contain all callbacks
+- 	 Custom ListRow creation from mode

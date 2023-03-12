@@ -1,5 +1,6 @@
 #include "app.h"
 #include "modes/mode.h"
+#include "modes/modes-s.h"
 
 static void modeItems(APP_MUT) {
 	AUTO display = gtk_list_box_new();
@@ -7,9 +8,18 @@ static void modeItems(APP_MUT) {
 	gtk_list_box_set_selection_mode(display, GTK_SELECTION_SINGLE);
 	CLASS(display, "display");
 	ADD(app->ui.scroll, display);
-	CLASS(app->ui.scroll, "items");
 	app->ui.display = display;
+	
 	app->currentMode.generate(&app->api);
+	
+	gtk_widget_destroy(gtk_bin_get_child(app->ui.preview));
+	if (app->currentMode.metadata.type & HAS_PREVIEW) {
+		gtk_widget_show(app->ui.preview);
+	} else {
+		gtk_widget_hide(app->ui.preview);
+	}
+
+	CLASS(app->ui.scroll, "items");
 	gtk_widget_show_all(app->ui.scroll);
 }
 
@@ -31,6 +41,8 @@ static bool updateModeLabel(APP) {
 	gtk_style_context_add_class(modeStyleCtx, app->currentMode.label);
 }
 
+// TODO: Allow modes to implement their own cleanup
+// WARN: Dangerous if your memory isnt managed correctly
 static void modeItemCleanup(APP) {
 	
 	AUTO children = gtk_container_get_children(app->ui.display);

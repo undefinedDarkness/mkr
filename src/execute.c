@@ -32,17 +32,18 @@
     AUTO selected = gtk_list_box_get_selected_row(app->ui.display);
     Result *result = g_object_get_data(selected, "__resptr");
 	app->currentMode.execute(g_object_get_data(selected, "__label"), *result);
-
-    if (quit)
-      QUIT();
   } else if (type & COMMAND) {
     if (type & PROGRESS) {
       app->currentMode.execute_command(
           gtk_entry_get_text(app->ui.input), &app->api);
     } else {
       app->currentMode.execute_command(gtk_entry_get_text(app->ui.input), &app->api);
-      if (quit)
-        QUIT();
     }
+  }
+
+  if (quit) {
+	  // This is to allow the clipboard to pick up any requested contents
+  		gtk_widget_hide(app->ui.window);
+	  g_timeout_add(1000, gtk_main_quit, NULL);
   }
 }

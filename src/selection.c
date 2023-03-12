@@ -18,6 +18,15 @@ void update_selected(int offset, APP) {
 	gtk_list_box_unselect_row(display, selected);
 	gtk_list_box_select_row(display, new);
 
+	// TODO: Let mode do this async if preview takes a while eg: pdf
+	if (app->currentMode.metadata.type & HAS_PREVIEW) {
+		Result *res = g_object_get_data(new, "__resptr");
+		gtk_widget_destroy(gtk_bin_get_child(app->ui.preview));
+		gtk_container_add(app->ui.preview, app->currentMode.preview(res));
+		gtk_widget_show_all(app->ui.preview);
+	}
+		
+
 	// gtk_widget_grab_focus(app->ui.input);
 
 	// g_object_unref(selected);

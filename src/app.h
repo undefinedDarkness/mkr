@@ -9,8 +9,9 @@ typedef struct {
     GtkWidget *input;
     GtkWidget *display;
 	GtkWidget *mode;
+	GtkWidget *preview;
 	GtkWidget *scroll;
-	GtkWidget *favourites;
+	// GtkWidget *favourites;
 } UI;
 
 typedef struct {
@@ -32,6 +33,7 @@ void scaffold(GtkWidget*, APP_MUT);
 
 // void async_insert_item_single(struct { Result res; APP;  }*i);
 void async_insert_item(GList* list, APP);
+void async_insert_custom_item(GList *list, APP);
 // void sort_display(APP_MUT);
 void update_selected(int new, APP);
 

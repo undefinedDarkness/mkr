@@ -1,5 +1,6 @@
 #include "app.h"
 #include "gdk/gdkkeysyms.h"
+#include "modes/modes-s.h"
 
 // void update_mode(char p, APP_MUT);
 
@@ -28,7 +29,7 @@ static bool on_input_key_press(GtkWidget *input, GdkEventKey *key, APP_MUT) {
     if (c == 'V')
       return false;
 
-	Mode prev = app->currentMode;
+    Mode prev = app->currentMode;
     for (int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++) {
       if (c == *modes[i].label)
         app->currentMode = modes[i];
@@ -54,10 +55,20 @@ static void on_input_focus_lost(GtkWidget *input, GdkEventFocus event,
 
 void scaffold(GtkWidget *window, APP_MUT) {
   g_signal_connect(window, "key-press-event", on_window_key_press, app);
+	AUTO windowLayout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+	ADD(window, windowLayout);
 
   AUTO layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-  ADD(window, layout);
+  ADD(windowLayout, layout);
   CLASS(layout, "layout");
+
+  AUTO preview = gtk_frame_new("");//gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+	CLASS(preview, "preview");
+	gtk_frame_set_shadow_type(preview, GTK_SHADOW_NONE);
+gtk_box_pack_end(windowLayout, preview, true, true, 0);
+	// ADD(windowLayout, preview);
+	
+
 
   AUTO header = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
   CLASS(header, "header");
@@ -71,16 +82,16 @@ void scaffold(GtkWidget *window, APP_MUT) {
   gtk_box_pack_start(header, input, true, true, 0);
   ADD(layout, header);
 
-  AUTO favourites = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-  CLASS(favourites, "favourites");
-  ADD(layout, favourites);
+  // AUTO favourites = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+  // CLASS(favourites, "favourites");
+  // ADD(layout, favourites);
 
   AUTO scroll = gtk_scrolled_window_new(NULL, NULL);
   // gtk_widget_hide(gtk_scrolled_window_get_hscrollbar(scroll));
   // gtk_box_pack_end(layout, scroll, true, true, 0);
-	gtk_box_pack_start(layout, scroll, false, false, 0);	
+  gtk_box_pack_start(layout, scroll, false, false, 0);
   // ADD(layout, scroll);
-	
+
   //  AUTO display = gtk_list_box_new();
   //  gtk_list_box_set_sort_func(display, sort, app, NULL);
   // gtk_list_box_set_selection_mode(display, GTK_SELECTION_SINGLE);
@@ -89,8 +100,8 @@ void scaffold(GtkWidget *window, APP_MUT) {
 
   app->ui = (UI){.window = window,
                  .scroll = scroll,
-                 .favourites = favourites,
                  .input = input,
                  .mode = mode,
+				 .preview = preview, 
                  .display = NULL};
 }

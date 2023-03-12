@@ -1,6 +1,5 @@
-#include "modes/mode.h"
 #include "app.h"
-
+#include "modes/modes-s.h"
 
 int main(int argc, char** argv) {
 	gtk_init(&argc, &argv);
@@ -11,7 +10,7 @@ int main(int argc, char** argv) {
 		.update_progress = async_update_progress,
 		.insert_item = async_insert_item,
 		.data = app,
-		.insert_item_single = async_insert_item_single 
+		.insert_custom_item = async_insert_custom_item//, const State *const app) 
 	};
 
 	app->selectedItem = -1;
@@ -60,6 +59,7 @@ int main(int argc, char** argv) {
 	modeInit(modes[0], app);
 
 	gtk_widget_show_all(window);
+	gtk_widget_hide(app->ui.preview);
 
 	// window_on_screen_changed(window, NULL, NULL);
 

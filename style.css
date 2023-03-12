@@ -1,12 +1,6 @@
 /* https://developer-old.gnome.org/gtk3/stable/chap-css-overview.html 
  * https://developer-old.gnome.org/gtk3/unstable/chap-css-properties.html*/
 
-.favourites {
-	background-color: skyblue;
-	color: white;
-	padding: 0 18px;
-}
-
 entry {
 	min-width: 350px; 
 }
@@ -15,37 +9,21 @@ progressbar, progress, trough {
 	min-height: 32px;
 }
 
-progressbar trough progress {
-	background-image: linear-gradient(to right, #c6ffdd, #fbd786, #f7797d);
+window {
+	font-size: 24px;
+	font-family: "Liberation Sans";
 }
 
 window,.layout {
 	background: transparent;
 }
 
-window, row {
-	font-family: "Liberation Sans";
-}
-
-.display {
-    background-color: #221529;
-}
-
-row:selected {
-	background: red;
-}
-
 row {
 	padding: 8px;
 }
 
-.mode {
-	padding: 16px 20px;
-	font-size: 32px;
-}
-
-row box label{
-	font-size: 18px;
+row:selected {
+	background: #3b4252;
 }
 
 window scrolledwindow.items {
@@ -54,21 +32,50 @@ window scrolledwindow.items {
 
 entry {
 	border-radius: 0;
+	outline: 0;
+	border: none;
 }
 
-window label {
-	color: #fafafa ;
+.mode {
+	padding: 16px 20px;
+	font-size: 32px;
+}
+
+.display {
+    background-color: #2e3440;
+}
+
+.preview {
+background-color: #434c5e;	
+	border: 0px;
+	padding: 8px;
+	min-width: 150px;
+}
+
+* {
+	color: #eceff4;	
 }
 
 .header label.APP {
-	background-color: #d64562 ;
+	background-color: #bf616a;
 }
 
 .header label.DL {
-	background-color: #f2735c;
+	background-color: #d08770;
+}
+
+.header > * {
+	background-color: #4c566a;
 }
 
 .header label {
-	background-color: #000;
 	font-weight: bolder;
+}
+
+.bubble {
+	font-weight: bold;
+	background-color: #81a1c1;
+	padding: 8px;
+	font-size: 16px;
+	border-radius: 50px;
 }
