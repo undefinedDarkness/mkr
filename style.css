@@ -5,6 +5,10 @@ entry {
 	min-width: 350px; 
 }
 
+.items {
+	min-width: 450px;
+}
+
 progressbar, progress, trough {
 	min-height: 32px;
 }
@@ -30,6 +34,7 @@ window scrolledwindow.items {
 	min-height: 500px;
 }
 
+
 entry {
 	border-radius: 0;
 	outline: 0;
@@ -39,9 +44,10 @@ entry {
 .mode {
 	padding: 16px 20px;
 	font-size: 32px;
+	min-width: 50px;
 }
 
-.display {
+.display, .dashboard-todo-view {
     background-color: #2e3440;
 }
 
@@ -78,4 +84,33 @@ background-color: #434c5e;
 	padding: 8px;
 	font-size: 16px;
 	border-radius: 50px;
+}
+
+.dashboard-clock {
+	font-family: "Bungee";
+	font-size: 50px;
+	color: white;
+	background: #ebcb8b;
+	margin: 8px;
+	border-radius: 8px;
+}
+
+.dashboard-launcher {
+	border-radius: 8px;
+	background: #3b4252;
+	margin: 8px;
+}
+
+.dashboard-launcher button {
+	background: none;
+	border: 0;
+	outline: 0;
+	box-shadow: 0 0;
+}
+
+.dashboard-quote {
+	background-color: #bf616a;
+	border-radius: 8px;
+	color: white;
+	margin: 8px;
 }

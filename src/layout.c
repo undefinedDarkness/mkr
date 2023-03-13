@@ -55,26 +55,24 @@ static void on_input_focus_lost(GtkWidget *input, GdkEventFocus event,
 
 void scaffold(GtkWidget *window, APP_MUT) {
   g_signal_connect(window, "key-press-event", on_window_key_press, app);
-	AUTO windowLayout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-	ADD(window, windowLayout);
+  // AUTO windowLayout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+  // ADD(window, windowLayout);
 
   AUTO layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-  ADD(windowLayout, layout);
   CLASS(layout, "layout");
 
-  AUTO preview = gtk_frame_new("");//gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-	CLASS(preview, "preview");
-	gtk_frame_set_shadow_type(preview, GTK_SHADOW_NONE);
-gtk_box_pack_end(windowLayout, preview, true, true, 0);
-	// ADD(windowLayout, preview);
-	
-
+  AUTO preview = gtk_frame_new(""); // gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+  CLASS(preview, "preview");
+  gtk_frame_set_shadow_type(preview, GTK_SHADOW_NONE);
+  // gtk_box_pack_end(windowLayout, preview, true, true, 0);
 
   AUTO header = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
   CLASS(header, "header");
+  
   AUTO mode = gtk_label_new("");
   CLASS(mode, "mode");
   ADD(header, mode);
+  
   AUTO input = gtk_entry_new();
   g_signal_connect(input, "key-press-event", on_input_key_press, app);
   g_signal_connect(input, "changed", on_input_changed, app);
@@ -82,26 +80,20 @@ gtk_box_pack_end(windowLayout, preview, true, true, 0);
   gtk_box_pack_start(header, input, true, true, 0);
   ADD(layout, header);
 
-  // AUTO favourites = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-  // CLASS(favourites, "favourites");
-  // ADD(layout, favourites);
+  AUTO contents = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+	ADD(contents,layout);
 
   AUTO scroll = gtk_scrolled_window_new(NULL, NULL);
-  // gtk_widget_hide(gtk_scrolled_window_get_hscrollbar(scroll));
-  // gtk_box_pack_end(layout, scroll, true, true, 0);
-  gtk_box_pack_start(layout, scroll, false, false, 0);
-  // ADD(layout, scroll);
+	CLASS(scroll, "items-viewport");
+  ADD(layout,scroll);
 
-  //  AUTO display = gtk_list_box_new();
-  //  gtk_list_box_set_sort_func(display, sort, app, NULL);
-  // gtk_list_box_set_selection_mode(display, GTK_SELECTION_SINGLE);
-  //  CLASS(display, "display");
-  //  ADD(scroll, display);
+  ADD(contents, preview);
+ADD(window,contents);
 
   app->ui = (UI){.window = window,
                  .scroll = scroll,
                  .input = input,
                  .mode = mode,
-				 .preview = preview, 
+                 .preview = preview,
                  .display = NULL};
 }

@@ -14,6 +14,8 @@ gnome = import('gnome')
 # )
 
 src = [
+'src/modes/todo.c',
+'src/modes/dashboard.c',
 'src/modes/font.c',
 'src/mode-change.c',
 'src/insertion.c',

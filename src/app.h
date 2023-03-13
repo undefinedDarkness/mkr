@@ -30,6 +30,7 @@ void modeInit(Mode, APP_MUT);
 void execute(APP);
 int sort(GtkWidget*a,GtkWidget*b,APP);
 void scaffold(GtkWidget*, APP_MUT);
+ void display_preview(GtkWidget *listbox, GtkWidget *row, APP);
 
 // void async_insert_item_single(struct { Result res; APP;  }*i);
 void async_insert_item(GList* list, APP);

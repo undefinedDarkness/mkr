@@ -25,10 +25,13 @@ typedef struct {
 
 enum ModeType {
   COMMAND = 1,
+  PROGRESS = 4, // display a progress bar after command is sent
+  
   ITEMS = 2,
-  PROGRESS = 4,
-  AUTOCLEAN = 8,
-  HAS_PREVIEW = 16
+  AUTOCLEAN = 8, // naivley try to cleanup after mode NOTE: BAD BAD BAD
+  HAS_PREVIEW = 16, // this will give a preview widget
+  
+  ONLY_PREVIEW = 32 // no items to display, no commands to pass
 };
 
 typedef struct {
@@ -50,13 +53,19 @@ typedef struct {
 } Mode;
 
 void app_mode_generate(API);
+void app_mode_execute(const char *const, Result);
+
 void emoji_generate(API);
+void emoji_execute(const char *, Result);
 
 void font_generate(API);
 GtkWidget* font_preview(Result*);
+void font_execute(const char*, Result); 
 
-void app_mode_execute(const char *const, Result);
-void emoji_execute(const char *, Result);
+void todo_generate(API);
+
+GtkWidget* dashboard(void*);
+
 void dl_execute(const char *url, API);
 
 #endif

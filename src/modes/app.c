@@ -1,5 +1,7 @@
 #include "mode.h"
 
+// NOTE: Memory leak with Results, they aren't ever freed
+
 void app_mode_execute(const char*const s, Result result) {
 	g_spawn_command_line_async(result.metadata, NULL);
 }

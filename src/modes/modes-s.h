@@ -36,5 +36,13 @@ const static Mode modes[] = {
 		.preview = font_preview,
 		.generate = font_generate,
 		.execute = NULL
-	}
+	},
+	{
+		.metadata = {
+			.symbol = "🏠",
+			.type = ONLY_PREVIEW
+		},
+		.label = "DASHBOARD",
+		.preview = dashboard	
+	},
 };

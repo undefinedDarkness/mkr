@@ -15,6 +15,7 @@ void emoji_execute(const char* label, Result) {
 	gtk_clipboard_set_text(clip, parts[0], -1);
 	gtk_clipboard_store(clip);
 	g_strfreev(parts);
+	g_object_unref(clip);
 }
 
 // herculean gymnastics to make this work correctly

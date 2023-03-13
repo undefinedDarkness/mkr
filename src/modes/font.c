@@ -33,6 +33,14 @@ GtkWidget* font_preview(Result *selectedResult) {
 	return scw;
 }
 
+void font_execute(const char*, Result res) {
+	char *fname = pango_font_family_get_name(res.metadata);
+	AUTO clip = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+	gtk_clipboard_set_text(clip, fname, -1);
+	gtk_clipboard_store(clip);
+	g_object_unref(clip);
+}
+
 void font_generate(API) {
 	int len; PangoFontFamily **families;
 	AUTO temp = gtk_label_new("");
