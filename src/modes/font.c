@@ -1,8 +1,4 @@
-#include "mode.h"
-#include "pango/pango-context.h"
-#include "pango/pango-font.h"
-#include "pango/pango-fontmap.h"
-#include "pango/pango-layout.h"
+#include "font.h"
 
 GtkWidget* font_preview(Result *selectedResult) {
 	AUTO layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
@@ -50,7 +46,7 @@ void font_generate(API) {
 
 	// NOTE: families isnt freed here, it is used later but never freed completley.
 	for (int i = 0; i<len;i++){
-		Result *r = calloc(1,sizeof(Result));
+		Result *r = g_slice_alloc0(sizeof(Result));//calloc(1,sizeof(Result));
 		AUTO family = families[i];
 		r->label = pango_font_family_get_name(family);
 		r->metadata = family;

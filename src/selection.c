@@ -1,6 +1,10 @@
 #include "app.h"
 
 void update_selected(int offset, APP) {
+	if (app->currentMode.metadata.type & ONLY_PREVIEW) {
+		return;
+	}
+
 	AUTO display = app->ui.display;
 	if (!GTK_IS_LIST_BOX(display)) {
 		g_error("Unexpected widget set for display, expected ListBox got %s", gtk_widget_get_name(display));

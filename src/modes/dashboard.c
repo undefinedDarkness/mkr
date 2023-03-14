@@ -20,7 +20,8 @@ static GtkWidget* launcherBtn(char *iconName, char*execute) {
 }
 
 static void dashboard_insert_todo_item(GList*list,GtkWidget*listbox) {
-	while (list != NULL && list->next != NULL ) {
+	while (list != NULL ) {
+		CLASS(list->data, "dashboard-todo-item");
 		ADD(listbox, list->data);
 		list = list->next;
 	}
@@ -57,7 +58,7 @@ GtkWidget* dashboard(void*) {
 	// TODO: Weather widget
 
 	// This is a pretty dumb way of doing it but im also lazy so deal with it.
-	AUTO todoView = gtk_list_box_new(); CLASS(todoView, "dashboard-todo-view");
+	AUTO todoView = gtk_box_new(GTK_ORIENTATION_VERTICAL, 16); CLASS(todoView, "dashboard-todo-view");
 	gtk_grid_attach_next_to(grid, todoView, quote, GTK_POS_BOTTOM, 4,2);
 	Api_t api = {
 		.insert_custom_item = dashboard_insert_todo_item,//, GtkWidget *listbox) 

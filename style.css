@@ -35,9 +35,10 @@ window scrolledwindow.items {
 }
 
 
-entry {
+entry, entry:focus {
 	border-radius: 0;
 	outline: 0;
+	box-shadow: none;
 	border: none;
 }
 
@@ -45,6 +46,10 @@ entry {
 	padding: 16px 20px;
 	font-size: 32px;
 	min-width: 50px;
+}
+
+checkbutton label {
+	margin-left: 16px;
 }
 
 .display, .dashboard-todo-view {
@@ -113,4 +118,20 @@ background-color: #434c5e;
 	border-radius: 8px;
 	color: white;
 	margin: 8px;
+}
+
+.dashboard-todo-view {
+	margin: 8px;
+}
+
+.dashboard-todo-item checkbutton {
+	padding: 4px;
+	border-radius: 100%;
+}
+
+.dashboard-todo-item {
+	margin: 0 6px;
+	border-radius: 8px;
+	padding: 12px;
+	background: #3b4252; 
 }

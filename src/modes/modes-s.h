@@ -1,10 +1,14 @@
 #include "mode.h"
+#include "app.h"
+#include "emoji.h"
+#include "font.h"
+#include "script.h"
 
 const static Mode modes[] = {
 	{
 		.metadata = {
 			.symbol = "T",
-			.type = ITEMS | AUTOCLEAN 
+			.type = ITEMS | CLEAN 
 		},
 		.label = "EMOJI",
 		.generate = emoji_generate,
@@ -16,8 +20,8 @@ const static Mode modes[] = {
 			.type = ITEMS,
 		},
 		.label = "APP",
-		.generate = app_mode_generate,
-		.execute = app_mode_execute
+		.generate = app_generate,
+		.execute = app_execute
 	},
 	{
 		.metadata = {
@@ -44,5 +48,20 @@ const static Mode modes[] = {
 		},
 		.label = "DASHBOARD",
 		.preview = dashboard	
+	},
+
+	// TEMP
+	{
+		.metadata = {
+			.symbol = "R",
+			.type = ITEMS
+		},
+		.label = "BIN",
+		.payload = &(struct CommandData){
+			.envp = NULL,
+			.workingDirectory = NULL,
+			.argv = (char*[2]){"dmenu_path",NULL}
+		},
+		.generate = script_generate,	
 	},
 };

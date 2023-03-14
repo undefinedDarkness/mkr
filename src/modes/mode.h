@@ -28,10 +28,10 @@ enum ModeType {
   PROGRESS = 4, // display a progress bar after command is sent
   
   ITEMS = 2,
-  AUTOCLEAN = 8, // naivley try to cleanup after mode NOTE: BAD BAD BAD
+  CLEAN = 8, // naivley try to cleanup after mode NOTE: BAD BAD BAD
   HAS_PREVIEW = 16, // this will give a preview widget
   
-  ONLY_PREVIEW = 32 // no items to display, no commands to pass
+  ONLY_PREVIEW = 32, // no items to display, no commands to pass
 };
 
 typedef struct {
@@ -43,24 +43,18 @@ typedef struct {
   char *label; // Must be uppercase and unique
   
   void (*generate)(API);
-  GtkWidget* (*preview)(Result*);
+  union {
+	  GtkWidget* (*preview)(Result*);
+  	  void* payload;
+  };
 
   union {
-    void (*execute)(const char *, Result); // Type = ITEMS
+    void (*execute)(const char *, Result);      // Type = ITEMS
     void (*execute_command)(const char *, API); // Type = COMMAND
   };
 
 } Mode;
 
-void app_mode_generate(API);
-void app_mode_execute(const char *const, Result);
-
-void emoji_generate(API);
-void emoji_execute(const char *, Result);
-
-void font_generate(API);
-GtkWidget* font_preview(Result*);
-void font_execute(const char*, Result); 
 
 void todo_generate(API);
 

@@ -1,5 +1,4 @@
-#include "mode.h"
-#include <stdlib.h>
+#include "emoji.h"
 
 struct EmojiData {
 	void*cbd;
@@ -7,6 +6,8 @@ struct EmojiData {
 	GList*buffer;
 	int count;
 };
+
+// TODO: Replicate the structure from script.c at some point, it should work better....
 
 void emoji_execute(const char* label, Result) {
 	// Result is already invalid by now, since it was stack memory
@@ -30,7 +31,7 @@ void emoji_read_cb(GObject *source, GAsyncResult *res, struct EmojiData *ed) {
 	  return;
   }
  
-  Result *result = calloc(1, sizeof(Result));
+  Result *result = g_slice_alloc0(sizeof(Result));//calloc(1, sizeof(Result));
   result->label = line;
   ed->buffer = g_list_prepend(ed->buffer, result);
 	
@@ -58,6 +59,7 @@ void emoji_generate(API) {
   ed->cbd = api->data;
   ed->buffer = NULL;
   ed->count = 0;
+g_filter_input_stream_set_close_base_stream(fdstream, true);
   g_data_input_stream_read_line_async(fdstream, G_PRIORITY_DEFAULT, NULL,
                                       emoji_read_cb, ed);
 }
