@@ -6,14 +6,16 @@ cc = meson.get_compiler('c')
 deps = [ dependency('gtk+-3.0'), dependency('x11'), cc.find_library('m', required: false) ]
 
 gnome = import('gnome')
-# resources = gnome.compile_resources(
-#   'colr-resources',
-#   'resources/index.xml',
-#   source_dir: 'resources',
-#   c_name: 'colr'
-# )
+ resources = gnome.compile_resources(
+   'mkr-resources',
+   'resources/index.xml',
+   source_dir: 'resources',
+   c_name: 'mkr'
+ )
 
 src = [
+'src/modes/math.c',
+'src/modes/generic.c',
 'src/modes/script.c',
 'src/modes/todo.c',
 'src/modes/dashboard.c',
@@ -27,8 +29,8 @@ src = [
 'src/layout.c',
 'src/modes/app.c',
 'src/selection.c',
-  'src/modes/emoji.c'
-# resources
+  'src/modes/emoji.c',
+resources
 ]
 
-executable('colr', sources : src, dependencies : deps, install : true)
+executable('mkr', sources : src, dependencies : deps, install : true)
