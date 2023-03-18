@@ -1,6 +1,7 @@
 #include "mode.h"
 #include "../app.h"
 #include "../../lib/expr.h"
+#include <math.h>
 #include <stdio.h>
 // Alias for expr.h
 
@@ -10,6 +11,10 @@ static struct expr_var_list vars = {
 };
 // im not dealing with it
 static GtkWidget *label;
+
+#define exprWrapper(fn) static float fn##_expr(struct expr_func *f, vec_expr_t *args, void*c) {return fn(expr_eval(&vec_nth(args,0)));}
+#define exprCWrapper(name, fn) static float name##_expr(struct expr_func *f, vec_expr_t *args, void*c) {return fn(expr_eval(&vec_nth(args,0)));}
+exprWrapper(sinf);
 
 // called before any update events...
 GtkWidget* math_mode_preview(void*) {
@@ -24,7 +29,24 @@ GtkWidget* math_mode_preview(void*) {
 	return label;
 };
 
-static struct expr_func user_funcs = {0};
+exprWrapper(cosf);
+exprWrapper(logf);
+exprWrapper(tanf);
+exprWrapper(log10f);
+exprCWrapper(secf, 1/cosf);
+exprCWrapper(cosecf, 1/sinf);
+exprCWrapper(cotf, 1/tanf);
+static struct expr_func user_funcs[] = {
+	{ "sin", sinf_expr, NULL, 0 },
+	{ "cos", cosf_expr, NULL, 0	},
+	{ "tan", tanf_expr, NULL, 0 },
+	{ "sec", secf_expr, NULL, 0 },
+	{ "cosec", cosecf_expr, NULL, 0 },
+	{ "cot", cotf_expr, NULL, 0 },
+	{ "ln", logf_expr, NULL, 0 },
+	{ "log", log10f_expr, NULL, 0 },
+	{0}
+};
 
 void math_mode_update(API) {
 	// TODO: Add a proper way for accesing parts of UI from here....
@@ -32,7 +54,7 @@ void math_mode_update(API) {
 	// of some badly written code...
 	// I'm not really a idealistic person though... 
 	const char *expression = gtk_entry_get_text(((State*)api->data)->ui.input);
-	struct expr *expr = expr_create(expression, strlen(expression), &vars, &user_funcs);
+	struct expr *expr = expr_create(expression, strlen(expression), &vars, user_funcs);
 	// parsing failed...
 	if (expr == NULL)
 		return;

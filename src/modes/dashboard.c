@@ -79,3 +79,5 @@ GtkWidget *dashboard(void *)
 
 	return grid;
 }
+
+// TODO: This is very incomplete, please customize it if you like..

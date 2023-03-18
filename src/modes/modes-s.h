@@ -1,3 +1,4 @@
+#include "hermes.h"
 #include "generic.h"
 #include "mode.h"
 #include "app.h"
@@ -49,7 +50,7 @@ const static Mode modes[] = {
 		.clean = font_clean,
 		.execute = copy_label_to_clipboard //, Result)
 	},
-	{
+	/*{
 		.metadata = {
 			.symbol = "🏠",
 			.type = ONLY_PREVIEW
@@ -57,7 +58,16 @@ const static Mode modes[] = {
 		.key = 'h',
 		.label = "DASHBOARD",
 		.preview = dashboard	
+	},*/
+	{
+	.metadata = {
+		.symbol = "⚡",
+		.type = ONLY_PREVIEW | UPDATE_ON_EDIT
 	},
+	.label = "HERMES",
+	.key = 'h',
+	.preview = hermes_preview
+},
 	{
 		.metadata = {
 			.symbol = "M",

@@ -14,6 +14,7 @@ gnome = import('gnome')
  )
 
 src = [
+'src/modes/hermes.c',
 'src/modes/math.c',
 'src/modes/generic.c',
 'src/modes/script.c',

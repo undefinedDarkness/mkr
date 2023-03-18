@@ -2,7 +2,6 @@
 #define MODES_H
 
 #include "../basic.h"
-// void async_update_progress(float,void*);
 
 typedef struct {
   const char *label;
@@ -10,8 +9,6 @@ typedef struct {
   void *metadata;
   int id;
 } Result;
-
-// bool async_insert_item_single(struct InsertData *i);
 
 struct State;
 typedef struct {
@@ -32,7 +29,7 @@ enum ModeType {
   HAS_PREVIEW = 16, // this will give a preview widget
 
   ONLY_PREVIEW = 32,  // no items to display, no commands to pass
-  UPDATE_ON_EDIT = 64 // call generate() when search is updated... 
+  UPDATE_ON_EDIT = 64 // call generate() when search is updated...
 };
 
 typedef struct {
@@ -43,16 +40,16 @@ typedef struct {
 
   char *label;   // Must be uppercase and unique
   void *payload; // any data
-	char key; // activation key 
+  char key;      // activation key
   // Preview
   GtkWidget *(*preview)(Result *);
 
   void (*generate)(API);
 
   union {
-  void (*execute)(const char *, Result);      // Type = ITEMS
-  void (*execute_command)(const char *, API); // Type = COMMAND
-  	};
+    void (*execute)(const char *, Result);      // Type = ITEMS
+    void (*execute_command)(const char *, API); // Type = COMMAND
+  };
 
   // Housekeeping
   void (*clean)(Result *);
@@ -60,9 +57,7 @@ typedef struct {
 } Mode;
 
 void todo_generate(API);
-
 GtkWidget *dashboard(void *);
-
 void dl_execute(const char *url, API);
 
 #endif

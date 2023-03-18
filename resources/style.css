@@ -1,9 +1,19 @@
 /* https://developer-old.gnome.org/gtk3/stable/chap-css-overview.html 
  * https://developer-old.gnome.org/gtk3/unstable/chap-css-properties.html*/
 
-entry {
+/* Rounded Corners */
+
+.header label {
+	border-radius: 16px 0 0 0;
+}
+
+.header entry {
+	border-radius: 0 16px 0 0;
 	min-width: 350px; 
-	font-family: "monospace";
+	font-family: "Input Mono";
+	outline: 0;
+	box-shadow: none;
+	border: none;
 }
 
 .items {
@@ -16,7 +26,8 @@ progressbar, progress, trough {
 
 window {
 	font-size: 24px;
-	font-family: "Liberation Sans";
+	font-family: "Helvetica Now Text";
+	border-radius: 16px;
 }
 
 window,.layout {
@@ -36,12 +47,7 @@ window scrolledwindow.items {
 }
 
 
-entry, entry:focus {
-	border-radius: 0;
-	outline: 0;
-	box-shadow: none;
-	border: none;
-}
+
 
 .mode {
 	padding: 16px 20px;
@@ -135,4 +141,18 @@ background-color: #434c5e;
 	border-radius: 8px;
 	padding: 12px;
 	background: #3b4252; 
+}
+
+/* HERMES */
+
+.hermes-view frame {
+	padding: 12px;
+}
+
+.hermes-view frame > label {
+	font-size: 0px;
+}
+
+.hermes-open-windows {
+	background-color: #ebcb8b;
 }
