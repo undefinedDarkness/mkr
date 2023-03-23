@@ -100,6 +100,6 @@ void scaffold(GtkWidget * window, APP_MUT)
 	ADD(window, contents);
 
 	app->ui = (UI) {
-	.window = window,.scroll = scroll,.input = input,.mode =
-		    mode,.preview = preview,.display = NULL};
+		.window = window,.scroll = scroll,.input = input,.mode =
+			mode,.preview = preview,.display = NULL};
 }

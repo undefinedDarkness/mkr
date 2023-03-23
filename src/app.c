@@ -54,9 +54,9 @@ int main(int argc, char **argv)
 	//== SETUP MODES ==
 	AUTO modeLabel = C_GET("MODE", "default", string, "APP");
 	app->currentMode = modes[0];
-	for (int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++)
+	/* for (int i = 0; i < sizeof(modes) / sizeof(modes[0]); i++)
 		if (g_ascii_strcasecmp(modeLabel, modes[i].label) == 0)
-			app->currentMode = modes[i];
+			app->currentMode = modes[i]; */
 	printf("Initial Mode: %s\n", app->currentMode.label);
 
 	//== INIT UI ==

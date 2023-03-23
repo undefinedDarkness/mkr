@@ -10,6 +10,17 @@
 const static Mode modes[] = {
 	{
 		.metadata = {
+			.symbol = "🚀",
+			.type = ITEMS,
+		},
+		.label = "APP",
+		.key = 'r',
+		.generate = app_generate,
+		.execute = app_execute
+	},
+
+	{
+		.metadata = {
 			.symbol = "T",
 			.type = ITEMS | CLEAN 
 		},
@@ -18,16 +29,6 @@ const static Mode modes[] = {
 		.clean = emoji_clean,
 		.generate = emoji_generate,
 		.execute = emoji_execute
-	},
-	{
-		.metadata = {
-			.symbol = "🚀",
-			.type = ITEMS,
-		},
-		.label = "APP",
-		.key = 'r',
-		.generate = app_generate,
-		.execute = app_execute
 	},
 	{
 		.metadata = {
