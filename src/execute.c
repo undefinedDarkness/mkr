@@ -50,7 +50,7 @@ void execute(APP)
 
 	if (quit) {
 		// This is to allow the clipboard to pick up any requested contents
-		gtk_widget_hide(app->ui.window);
-		g_timeout_add(1000, gtk_main_quit, NULL);
+		/* gtk_widget_hide(app->ui.window); */
+		/* g_timeout_add(1000, gtk_main_quit, NULL); */
 	}
 }

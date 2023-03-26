@@ -1,4 +1,4 @@
-project('mkr', 'c')
+project('mkr', 'c', default_options: [ 'c_std=c2x' ])
 
 # Add Math Library
 cc = meson.get_compiler('c')
@@ -7,13 +7,14 @@ deps = [ dependency('gtk+-3.0'), dependency('x11'), cc.find_library('m', require
 
 gnome = import('gnome')
  resources = gnome.compile_resources(
-   'mkr-resources',
+'mkr-resources',
    'resources/index.xml',
    source_dir: 'resources',
    c_name: 'mkr'
  )
 
 src = [
+'src/help.c',
 'src/modes/hermes.c',
 'src/modes/math.c',
 'src/modes/generic.c',
@@ -23,6 +24,7 @@ src = [
 'src/modes/font.c',
 'src/mode-change.c',
 'src/insertion.c',
+'src/help.c',
 'src/execute.c',
 'src/sort.c',
 'src/modes/dl.c',
@@ -34,4 +36,4 @@ src = [
 resources
 ]
 
-executable('mkr', sources : src, dependencies : deps, install : true)
+executable('mkr', sources : src, dependencies : deps, install : true, c_args: '-Wno-incompatible-pointer-types')

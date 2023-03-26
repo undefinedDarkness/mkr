@@ -5,21 +5,22 @@
 #include "modes/mode.h"
 
 typedef struct {
-    GtkWidget *window;
-    GtkWidget *input;
-    GtkWidget *display;
-	GtkWidget *mode;
-	GtkWidget *preview;
-	GtkWidget *scroll;
+    const GtkWidget *restrict window;
+    const GtkWidget *restrict input;
+    const GtkWidget *restrict display;
+	const GtkWidget *restrict mode;
+	const GtkWidget *restrict preview;
+	const GtkWidget *restrict scroll;
 	// GtkWidget *favourites;
 } UI;
 
 typedef struct {
 	UI ui;
-	GKeyFile *config;
+	const GKeyFile *restrict config;
 	Mode currentMode;
 	int selectedItem;
-	Api_t api;
+	 Api_t api;
+	char*restrict search;
 } State;
 
 #define APP const State *const app

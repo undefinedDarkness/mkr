@@ -1,6 +1,14 @@
 /* https://developer-old.gnome.org/gtk3/stable/chap-css-overview.html 
  * https://developer-old.gnome.org/gtk3/unstable/chap-css-properties.html*/
 
+.help-mode {
+	padding: 16px;
+}
+
+.help-mode-icon {
+	padding: 8px 16px;
+}
+
 /* Rounded Corners */
 
 .header label {

@@ -13,11 +13,13 @@ void emoji_execute(const char *label, Result)
 {
 	// Result is already invalid by now, since it was stack memory
 	char **parts = g_strsplit(label, "\t", 2);
+	
 	AUTO clip = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 	gtk_clipboard_set_text(clip, parts[0], -1);
 	gtk_clipboard_store(clip);
+
 	g_strfreev(parts);
-	g_object_unref(clip);
+	/* g_object_unref(clip); I dont think we should remove it? */
 }
 
 void emoji_clean(Result * res)

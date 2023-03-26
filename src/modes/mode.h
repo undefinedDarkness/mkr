@@ -34,25 +34,26 @@ enum ModeType {
 
 typedef struct {
   struct {
-    char *symbol;
-    enum ModeType type; // Flags + Type go here
+     char *symbol;
+ char *desc;
+     enum ModeType type; // Flags + Type go here
   } metadata;
 
-  char *label;   // Must be uppercase and unique
+   char *label;   // Must be uppercase and unique
   void *payload; // any data
-  char key;      // activation key
+   char key;      // activation key
   // Preview
-  GtkWidget *(*preview)(Result *);
+   GtkWidget *(*preview)(Result *);
 
-  void (*generate)(API);
+   void (*generate)(API);
 
   union {
-    void (*execute)(const char *, Result);      // Type = ITEMS
-    void (*execute_command)(const char *, API); // Type = COMMAND
+     void (*execute)(const char *, Result);      // Type = ITEMS
+     void (*execute_command)(const char *, API); // Type = COMMAND
   };
 
   // Housekeeping
-  void (*clean)(Result *);
+   void (*clean)(Result *);
 
 } Mode;
 
