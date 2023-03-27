@@ -1,6 +1,7 @@
 #include "app.h"
 #include <assert.h>
 
+// List of custom widgets
 void async_insert_custom_item(GList * list, APP)
 {
 	AUTO display = app->ui.display;
@@ -20,6 +21,7 @@ void async_insert_custom_item(GList * list, APP)
 	g_list_free(head);
 }
 
+// List of results..
 void async_insert_item(GList * list, APP)
 {
 	// g_print("-- PUSHING ITEMS --\n");

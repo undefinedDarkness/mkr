@@ -4,9 +4,9 @@
 #include "../app.h"
 
 struct CommandData {
-	char** argv;
 	char** envp; // currently not used
 	char*  workingDirectory;
+	char** argv;
 };
 void script_generate(API);
 #endif 

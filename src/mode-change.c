@@ -4,7 +4,7 @@
 
 static void modeItems(APP_MUT) {
   AUTO display = gtk_list_box_new();
-  gtk_list_box_set_sort_func(display, sort, app, NULL);
+  gtk_list_box_set_sort_func(display, (app->currentMode.metadata.type & CLEAR_ON_EDIT) ? NULL : sort, app, NULL);
   gtk_list_box_set_selection_mode(display, GTK_SELECTION_SINGLE);
   CLASS(display, "display");
 
@@ -14,6 +14,7 @@ static void modeItems(APP_MUT) {
   ADD(app->ui.scroll, display);
   app->ui.display = display;
 
+  g_assert_nonnull(app->currentMode.generate);
   app->currentMode.generate(&app->api);
 
   CLASS(app->ui.scroll, "items");

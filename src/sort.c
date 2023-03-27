@@ -1,7 +1,7 @@
 #include "app.h"
 #include <string.h>
 /* #define FTS_FUZZY_MATCH_IMPLEMENTATION */
-#include "../lib/match.c"
+#include "../lib/match.h"
 
 
 int sort(GtkWidget * rowA, GtkWidget * rowB, APP)

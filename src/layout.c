@@ -50,15 +50,24 @@ static bool on_input_key_press(GtkWidget *input, GdkEventKey *key, APP_MUT) {
 }
 
 static void on_input_changed(GtkWidget *input, APP_MUT) {
-  if (app->currentMode.metadata.type & UPDATE_ON_EDIT) {
-    app->currentMode.generate(&app->api);
-    return;
+  if (app->currentMode.metadata.type & CLEAR_ON_EDIT){
+  
+	GList *children = gtk_container_get_children(app->ui.display);
+	while (children != NULL) {
+		gtk_widget_destroy(children->data); // TODO: hook into cleanup system
+		children = children->next;
+	}
+
+
   }
-  if (!(app->currentMode.metadata.type & ITEMS))
-    return;
+	if (app->currentMode.metadata.type & UPDATE_ON_EDIT) {
+    app->currentMode.generate(&app->api);
+  }
+  if (app->currentMode.metadata.type & ITEMS) {
   app->search = gtk_entry_get_text(input);
   gtk_list_box_invalidate_sort(app->ui.display);
   update_selected(0xAA, app);
+  }
 }
 
 static void on_input_focus_lost(GtkWidget *input, GdkEventFocus event,

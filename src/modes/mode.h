@@ -27,6 +27,7 @@ enum ModeType {
   ITEMS = 2,
   CLEAN = 8,        // can clean up after itself
   HAS_PREVIEW = 16, // this will give a preview widget
+  CLEAR_ON_EDIT = 128, // clear items on edit and disable builtin search entirely..?
 
   ONLY_PREVIEW = 32,  // no items to display, no commands to pass
   UPDATE_ON_EDIT = 64 // call generate() when search is updated...

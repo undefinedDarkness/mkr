@@ -13,7 +13,12 @@ gnome = import('gnome')
    c_name: 'mkr'
  )
 
+lib = [
+  'lib/match.c'
+  ]
+
 src = [
+'src/modes/fsearch.c',
 'src/help.c',
 'src/modes/hermes.c',
 'src/modes/math.c',
@@ -33,7 +38,8 @@ src = [
 'src/modes/app.c',
 'src/selection.c',
   'src/modes/emoji.c',
-resources
+resources,
+lib
 ]
 
 executable('mkr', sources : src, dependencies : deps, install : true, c_args: '-Wno-incompatible-pointer-types')

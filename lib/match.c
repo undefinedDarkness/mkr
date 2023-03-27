@@ -16,16 +16,14 @@
  */
 
 #include <math.h>
-#include <ctype.h>
-#include <string.h>
-#include <stdbool.h>
+#include <stdlib.h>
+#include "match.h"
 
 #define SCORE_MAX INFINITY
 #define SCORE_MIN -INFINITY
 #define MATCH_FUZZY_MAX_LEN 256
 #define MAX_MULTI_CONTAINS_FILTER_SIZE 256
 
-typedef double score_t;
 enum matching_mode {
   MATCHING_MODE_CONTAINS,
   MATCHING_MODE_MULTI_CONTAINS,
@@ -62,7 +60,7 @@ enum matching_mode {
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 
 // matching
-static __always_inline bool contains_match(const char* filter, const char* text, bool insensitive) {
+static  bool contains_match(const char* filter, const char* text, bool insensitive) {
 	if(filter == NULL || strcmp(filter, "") == 0) {
 		return true;
 	}
@@ -85,7 +83,7 @@ static __always_inline char* strcasechr(const char* s,char c, bool insensitive) 
 	}
 }
 
-static bool fuzzy_match(const char* filter, const char* text, bool insensitive) {
+ bool fuzzy_match(const char* filter, const char* text, bool insensitive) {
 	if(filter == NULL || strcmp(filter, "") == 0) {
 		return true;
 	}
@@ -147,14 +145,14 @@ bool match_for_matching_mode(const char* filter, const char* text,
 // end matching
 
 // fuzzy matching
-static void precompute_bonus(const char* haystack, score_t* match_bonus, const int m) {
+static void precompute_bonus(const char* haystack, double* match_bonus, const int m) {
 	/* Which positions are beginning of words */
 	/* int m = strlen(haystack); */
 	char last_ch = '\0';
 	for(int i = 0; i < m; i++) {
 		char ch = haystack[i];
 
-		score_t score = 0;
+		double score = 0;
 		if(isalnum(ch)) {
 			if(!last_ch || last_ch == '/') {
 				score = SCORE_MATCH_SLASH;
@@ -184,24 +182,24 @@ static inline bool match_with_case(char a, char b, bool insensitive) {
 	return insensitive?tolower(a)==tolower(b):a==b;
 }
 
-static inline void match_row(int row, score_t* curr_D, score_t* curr_M,
-							 const score_t* last_D, const score_t* last_M,
-							 const char* needle, const char* haystack, int n, int m, score_t* match_bonus, bool insensitive) {
+static inline void match_row(int row, double* curr_D, double* curr_M,
+							 const double* last_D, const double* last_M,
+							 const char* needle, const char* haystack, int n, int m, double* match_bonus, bool insensitive) {
 	int i = row;
 
-	score_t prev_score = SCORE_MIN;
-	score_t gap_score = i == n - 1 ? SCORE_GAP_TRAILING : SCORE_GAP_INNER;
+	double prev_score = SCORE_MIN;
+	double gap_score = i == n - 1 ? SCORE_GAP_TRAILING : SCORE_GAP_INNER;
 
 	for(int j = 0; j < m; j++) {
 		if(match_with_case(needle[i], haystack[j], insensitive)) {
-			score_t score = SCORE_MIN;
+			double score = SCORE_MIN;
 			if(!i) {
 				// first line we fill in a row for non-matching
 				score = (j * SCORE_GAP_LEADING) + match_bonus[j];
 			} else if(j) { /* i > 0 && j > 0*/
 				// we definitely match case insensitively already so if
 				// our character isn't the same then we have a different case
-				score_t consecutive_bonus = needle[i] == haystack[j] ? SCORE_MATCH_CONSECUTIVE : SCORE_MATCH_NOT_MATCH_CASE;
+				double consecutive_bonus = needle[i] == haystack[j] ? SCORE_MATCH_CONSECUTIVE : SCORE_MATCH_NOT_MATCH_CASE;
 
 				score = max(last_M[j - 1] + match_bonus[j],
 							/* consecutive match, doesn't stack
@@ -242,13 +240,13 @@ static inline void match_row(int row, score_t* curr_D, score_t* curr_M,
 // Also, the reference algorithm does not take into account case sensitivity
 // which has been implemented here.
 
-static score_t fuzzy_score(const char* haystack, const char* needle, bool insensitive) {
+ double fuzzy_score(const char* haystack, const char* needle, bool insensitive) {
 	if(*needle == 0)
 		return SCORE_MIN;
 
 	const int n = strlen(needle);
 	const int m = strlen(haystack);
-	score_t match_bonus[m];
+	double match_bonus[m];
 	precompute_bonus(haystack, match_bonus, m);
 
 	if(m > MATCH_FUZZY_MAX_LEN || n > m) {
@@ -270,10 +268,10 @@ static score_t fuzzy_score(const char* haystack, const char* needle, bool insens
 	 * D[][] Stores the best score for this position ending with a match.
 	 * M[][] Stores the best possible score at this position.
 	 */
-	score_t D[2][MATCH_FUZZY_MAX_LEN], M[2][MATCH_FUZZY_MAX_LEN];
+	double D[2][MATCH_FUZZY_MAX_LEN], M[2][MATCH_FUZZY_MAX_LEN];
 
-	score_t* last_D, *last_M;
-	score_t* curr_D, *curr_M;
+	double* last_D, *last_M;
+	double* curr_D, *curr_M;
 
 	last_D = D[0];
 	last_M = M[0];
@@ -283,8 +281,8 @@ static score_t fuzzy_score(const char* haystack, const char* needle, bool insens
 	for(int i = 0; i < n; i++) {
 		match_row(i, curr_D, curr_M, last_D, last_M, needle, haystack, n, m, match_bonus, insensitive);
 
-		SWAP(curr_D, last_D, score_t *);
-		SWAP(curr_M, last_M, score_t *);
+		SWAP(curr_D, last_D, double *);
+		SWAP(curr_M, last_M, double *);
 	}
 
 	return last_M[m - 1];
@@ -292,14 +290,14 @@ static score_t fuzzy_score(const char* haystack, const char* needle, bool insens
 // end fuzzy matching
 
 // sorting
-static int fuzzy_sort(const char* text1, const char* text2, const char* filter, bool insensitive) {
+ int fuzzy_sort(const char* text1, const char* text2, const char* filter, bool insensitive) {
 	
 	const bool match1 = fuzzy_match(filter, text1, insensitive);
 	const bool match2 = fuzzy_match(filter, text2, insensitive);
 	// both filters match do fuzzy scoring
 	if(match1 && match2) {
-		const score_t dist1 = fuzzy_score(text1, filter, insensitive);
-		const score_t dist2 = fuzzy_score(text2, filter, insensitive);
+		const double dist1 = fuzzy_score(text1, filter, insensitive);
+		const double dist2 = fuzzy_score(text2, filter, insensitive);
 		if(dist1 == dist2) {
 			// same same
 			return 0;
