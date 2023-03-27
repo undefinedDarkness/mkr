@@ -9,17 +9,7 @@
 #include "script.h"
 
 const static Mode modes[] = {
-    {.metadata = {.desc = "File search",
-                  .symbol = "S",
-                  .type = ITEMS | UPDATE_ON_EDIT | CLEAR_ON_EDIT},
-     .label = "FSEARCH",
-     .key = 'f',
-     .payload = &(struct CommandData){
-		 .argv = (char*[4]){"find","-name","[SEARCH]",NULL},
-	 	 .workingDirectory = (void*)1// g_get_home_dir() 
-	 },
-	 .generate = script_generate,
-	},
+
     {.metadata =
          {
              .desc = "App Launcher",
@@ -30,7 +20,18 @@ const static Mode modes[] = {
      .key = 'r',
      .generate = app_generate,
      .execute = app_execute},
-
+    {.metadata = {.desc = "File search",
+                  .symbol = "S",
+                  .type = ITEMS | UPDATE_ON_EDIT | CLEAR_ON_EDIT},
+     .label = "FSEARCH",
+     .key = 'f',
+     .payload = &(struct CommandData){
+		 .argv = (char*[4]){"find","-name","[SEARCH]",NULL},
+		 .hint = REST_FILEPATH,
+	 	 .workingDirectory = (void*)1// g_get_home_dir() 
+	 },
+	 .generate = script_generate,
+	},
     {.metadata = {.desc = "Emoji Picker", .symbol = "T", .type = ITEMS | CLEAN},
      .label = "EMOJI",
      .key = 'u',

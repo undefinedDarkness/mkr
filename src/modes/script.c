@@ -13,6 +13,7 @@ void script_wait_cb(GObject *source, GAsyncResult *res, API) {
 struct ScriptData {
   GDataInputStream *stream;
   State *app;
+  struct CommandData *cmd;
 };
 static struct ScriptData state;
 
@@ -29,9 +30,30 @@ static void script_read_thread(GTask *task, GObject *source,
     Result *res = g_slice_alloc0(sizeof(Result));
     res->label = line;
     GtkWidget *obj = gtk_list_box_row_new();
-    GtkWidget *lbl = gtk_label_new(line);
-	gtk_label_set_xalign(lbl, 0);
-    ADD(obj, lbl);
+    AUTO layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);  CLASS(layout,"script-item");
+
+    switch (td->cmd->hint) {
+    case REST_FILEPATH: {
+							bool u;
+							const char* type = g_content_type_guess(res->label, NULL, 0, &u);
+							const GIcon* typeImg = g_content_type_get_icon(type);
+							const GtkImage *img = gtk_image_new_from_gicon(typeImg, GTK_ICON_SIZE_DND); CLASS(img, "script-icon");
+							gtk_container_add(layout,img);
+							break;
+    }
+	case REST_APPNAME:
+						// TODO:
+						break;
+    case REST_NONE:
+      break;
+    }
+
+    GtkWidget *lbl = gtk_label_new(line); CLASS(lbl,"script-text");
+    gtk_label_set_xalign(lbl, 0);
+
+    ADD(layout, lbl);
+    ADD(obj, layout);
+
     list = g_list_prepend(list, obj);
     gtk_widget_show_all(obj);
   }
@@ -57,11 +79,11 @@ static void script_read_async(GAsyncReadyCallback *cb, void *ud) {
 static void script_read_cb(GObject *src, GAsyncResult *res,
                            struct ScriptData *data) {
   GList *list = script_read_finish(src, res, NULL);
- 
+
   if (list == NULL) {
-  	#ifndef NDEBUG
-	  g_print("Script: End of list\n");
-	#endif
+#ifndef NDEBUG
+    g_print("Script: End of list\n");
+#endif
     return;
   }
   AUTO display = data->app->ui.display;
@@ -74,7 +96,8 @@ static void script_read_cb(GObject *src, GAsyncResult *res,
 
 /* static struct CommandData cmd; */
 
-// TODO: Allow any still running async tasks to be cancelled when a new one is created..
+// TODO: Allow any still running async tasks to be cancelled when a new one is
+// created..
 
 void script_generate(API) {
   APP = api->data;
@@ -105,21 +128,21 @@ void script_generate(API) {
   printf("Arguments: ");
   i = 0;
   while (argv[i] != NULL) {
-	  printf("%s\t", argv[i]);
-	  i++;
+    printf("%s\t", argv[i]);
+    i++;
   }
   printf("\n");
 #endif
 
   AUTO procLauncher = g_subprocess_launcher_new(G_SUBPROCESS_FLAGS_STDOUT_PIPE);
   g_subprocess_launcher_set_cwd(procLauncher, cwd);
-  AUTO process =
-      g_subprocess_launcher_spawnv(procLauncher, argv, NULL);
+  AUTO process = g_subprocess_launcher_spawnv(procLauncher, argv, NULL);
   /* AUTO process =
       g_subprocess_newv(cmdData->argv, G_SUBPROCESS_FLAGS_STDOUT_PIPE,
                         NULL); */
   /* struct ScriptData *data = malloc(sizeof(struct ScriptData)); */
   state.app = app;
+  state.cmd = cmdData;
   state.stream = g_data_input_stream_new(g_subprocess_get_stdout_pipe(process));
 
   g_subprocess_wait_async(process, NULL, script_wait_cb, api);
