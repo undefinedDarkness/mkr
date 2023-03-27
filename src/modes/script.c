@@ -1,12 +1,27 @@
 #include "script.h"
 #include <gio/gunixinputstream.h>
+#include <string.h>
 
 // TODO: Move the item creation to be async, it takes up the entire thread
 // otherwise I dont know why emoji doesnt also suffer from this issue but I
 // guess, the little bit of time that reads take is enough to not keep the main
 // thread very occupied.
 
-void script_wait_cb(GObject *source, GAsyncResult *res, API) {
+void script_launch_file(const char* lbl,Result res) {
+	char *buf = g_slice_alloc(256);
+	strcpy(buf, "file://");
+	strcat(buf, res.metadata);
+	bool u;
+	const char* contentType = g_content_type_guess(lbl, NULL, 0, &u);
+#ifndef NDEBUG
+	printf("Launching: %s with %s\n", buf, contentType);
+#endif
+
+	g_app_info_launch_default_for_uri_async(buf, NULL, NULL,  NULL, NULL);	
+	g_slice_free1(256, buf);
+}
+
+static void script_wait_cb(GObject *source, GAsyncResult *res, API) {
   g_subprocess_wait_finish(source, res, NULL);
 }
 
@@ -20,8 +35,8 @@ static struct ScriptData state;
 // This function is run in a thread
 static void script_read_thread(GTask *task, GObject *source,
                                struct ScriptData *td, void *) {
-  int len;
-  char *line;
+  size_t len;
+  const char *line;
   GList *list = NULL;
   int count = 100;
   while (count-- && ((line = g_data_input_stream_read_line(
@@ -30,6 +45,8 @@ static void script_read_thread(GTask *task, GObject *source,
     Result *res = g_slice_alloc0(sizeof(Result));
     res->label = line;
     GtkWidget *obj = gtk_list_box_row_new();
+	g_object_set_data(obj, "__resptr", res);
+	g_object_set_data(obj, "__label", line);
     AUTO layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);  CLASS(layout,"script-item");
 
     switch (td->cmd->hint) {
@@ -39,6 +56,7 @@ static void script_read_thread(GTask *task, GObject *source,
 							const GIcon* typeImg = g_content_type_get_icon(type);
 							const GtkImage *img = gtk_image_new_from_gicon(typeImg, GTK_ICON_SIZE_DND); CLASS(img, "script-icon");
 							gtk_container_add(layout,img);
+							res->metadata = g_canonicalize_filename(res->label, td->cmd->workingDirectory != (void*)1 ? g_get_current_dir() : g_get_home_dir());
 							break;
     }
 	case REST_APPNAME:

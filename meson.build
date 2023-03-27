@@ -18,7 +18,7 @@ lib = [
   ]
 
 src = [
-'src/modes/fsearch.c',
+'src/modes/upload.c',
 'src/help.c',
 'src/modes/hermes.c',
 'src/modes/math.c',

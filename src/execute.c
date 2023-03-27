@@ -34,6 +34,9 @@ void execute(APP)
 	if (type & ITEMS) {
 		AUTO selected = gtk_list_box_get_selected_row(app->ui.display);
 		Result *result = g_object_get_data(selected, "__resptr");
+		char*label = g_object_get_data(selected,"__label");
+		g_assert(label!=NULL);
+		g_assert(result != NULL);
 		app->currentMode.execute(g_object_get_data(selected, "__label"),
 					 *result);
 	} else if (type & COMMAND) {

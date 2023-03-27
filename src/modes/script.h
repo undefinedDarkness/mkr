@@ -16,4 +16,5 @@ struct CommandData {
 	enum ResultHint hint;
 };
 void script_generate(API);
+void script_launch_file(const char*lbl,Result);
 #endif 

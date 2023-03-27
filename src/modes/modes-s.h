@@ -1,12 +1,12 @@
 #include "app.h"
 #include "emoji.h"
 #include "font.h"
-#include "fsearch.h"
 #include "generic.h"
 #include "hermes.h"
 #include "math.h"
 #include "mode.h"
 #include "script.h"
+#include "upload.h"
 
 const static Mode modes[] = {
 
@@ -20,7 +20,14 @@ const static Mode modes[] = {
      .key = 'r',
      .generate = app_generate,
      .execute = app_execute},
-    {.metadata = {.desc = "File search",
+	{.metadata={.desc="Upload to 0x0.st",
+			   .symbol = "U",
+			   .type = ONLY_PREVIEW},
+	.label = "UPLOAD",
+	.key = 'u',
+	.preview = uploadPreview
+	},
+	{.metadata = {.desc = "File search",
                   .symbol = "S",
                   .type = ITEMS | UPDATE_ON_EDIT | CLEAR_ON_EDIT},
      .label = "FSEARCH",
@@ -30,11 +37,12 @@ const static Mode modes[] = {
 		 .hint = REST_FILEPATH,
 	 	 .workingDirectory = (void*)1// g_get_home_dir() 
 	 },
+	 .execute = script_launch_file,
 	 .generate = script_generate,
 	},
     {.metadata = {.desc = "Emoji Picker", .symbol = "T", .type = ITEMS | CLEAN},
      .label = "EMOJI",
-     .key = 'u',
+     .key = 'e',
      .generate = emoji_generate,
      .execute = emoji_execute},
     {.metadata =

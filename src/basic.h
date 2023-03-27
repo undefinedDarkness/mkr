@@ -13,5 +13,4 @@ typedef gboolean bool;
 #define QUIT g_print("%s:%d is quitting\n", __FILE__, __LINE__);gtk_main_quit
 
 
-
 #endif

@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 	app->api = (Api_t) {
 		.update_progress = async_update_progress,.insert_item = async_insert_item,.data = app,.insert_custom_item = async_insert_custom_item	//, const State *const app) 
 	};
-
+	app->search = "";
 	app->selectedItem = -1;
 	app->config = g_key_file_new();
 	g_key_file_load_from_file(app->config, "config.ini", G_KEY_FILE_NONE,
