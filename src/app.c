@@ -64,6 +64,7 @@ int main(int argc, char **argv)
 
 	// Rest of mode init
 	modeInit(modes[0], app);
+	update_selected(0, app);
 
 	gtk_widget_show_all(window);
 	gtk_widget_hide(app->ui.preview);

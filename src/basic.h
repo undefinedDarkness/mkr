@@ -12,5 +12,11 @@ typedef gboolean bool;
 #define ADD(p, c) gtk_container_add(GTK_CONTAINER(p), c);
 #define QUIT g_print("%s:%d is quitting\n", __FILE__, __LINE__);gtk_main_quit
 
+#define lambda(return_type, function_body) \
+({ \
+      return_type __fn__ function_body \
+          __fn__; \
+})
+
 
 #endif
