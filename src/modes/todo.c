@@ -2,9 +2,11 @@
 
 // lets assume, your todo list isnt some 1000 items long....
 
+static char* path; 
 void todo_generate(API)
 {
-	AUTO io = g_io_channel_new_file("todo.txt", "r", NULL);
+	path = g_build_filename(g_get_user_special_dir(G_USER_DIRECTORY_DOCUMENTS), "todo-mkr.txt", NULL);
+	AUTO io = g_io_channel_new_file(path, "r", NULL);
 	char *line = NULL;
 	int len;
 	GList *list = NULL;

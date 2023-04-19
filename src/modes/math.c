@@ -57,6 +57,7 @@ exprWrapper(log10f);
 exprCWrapper(secf, 1/cosf);
 exprCWrapper(cosecf, 1/sinf);
 exprCWrapper(cotf, 1/tanf);
+exprWrapper(sqrtf);
 static struct expr_func user_funcs[] = {
 	{ "sin", sinf_expr, NULL, 0 },
 	{ "cos", cosf_expr, NULL, 0	},
@@ -66,6 +67,7 @@ static struct expr_func user_funcs[] = {
 	{ "cot", cotf_expr, NULL, 0 },
 	{ "ln", logf_expr, NULL, 0 },
 	{ "log", log10f_expr, NULL, 0 },
+	{ "sqrt", sqrtf_expr, NULL, 0 },
 	{0}
 };
 
