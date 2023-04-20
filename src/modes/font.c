@@ -40,7 +40,7 @@ GtkWidget *font_preview(Result * selectedResult)
 	return scw;
 }
 
-void font_execute(const char *, Result res)
+void font_execute(const char *_, Result res)
 {
 	char *fname = pango_font_family_get_name(res.metadata);
 	AUTO clip = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);

@@ -34,7 +34,7 @@ static void dashboard_insert_todo_item(GList * list, GtkWidget * listbox)
 	g_list_free(list);
 }
 
-GtkWidget *dashboard(void *)
+GtkWidget *dashboard(void *_)
 {
 
 	AUTO grid = gtk_grid_new();

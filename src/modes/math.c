@@ -26,13 +26,13 @@ static GtkWidget* units;
 exprWrapper(sinf);
 
 // called before any update events...
-GtkWidget* math_mode_preview(void*) {
+GtkWidget* math_mode_preview(void*_) {
 
     AUTO pi = expr_var(&vars, "PI", 2);
-	pi->value = M_PI;
+	pi->value = G_PI;
 
 	AUTO e = expr_var(&vars, "E", 1);
-	e->value = M_E;
+	e->value = G_E;
 
 	AUTO layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_set_homogeneous(layout, false);

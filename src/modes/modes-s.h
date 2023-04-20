@@ -36,8 +36,8 @@ const static Mode modes[] = {
         .key = 'f',
         .payload =
             &(struct CommandData){
-                .argv = (char *[4]){"find", "-name", "[SEARCH]", NULL},
-                .hint = REST_FILEPATH,
+                .argv = (char *[1]){"locate $0 || find -name $0"},
+                .flags = FLAG_FILEPATH | FLAG_SHELL,
                 .workingDirectory = (void *)1 // g_get_home_dir()
             },
         .execute = script_launch_file,

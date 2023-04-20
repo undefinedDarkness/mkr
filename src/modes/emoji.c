@@ -9,7 +9,7 @@ struct EmojiData {
 
 // TODO: Replicate the structure from script.c at some point, it should work better....
 
-void emoji_execute(const char *label, Result)
+void emoji_execute(const char *label, Result _)
 {
 	// Result is already invalid by now, since it was stack memory
 	char **parts = g_strsplit(label, "\t", 2);

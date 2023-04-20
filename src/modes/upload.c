@@ -35,7 +35,7 @@ static void on_drag_data_received (GtkWidget *wgt, GdkDragContext *context, gint
     gtk_drag_finish(context, TRUE, FALSE, time); // Drag and drop was successful!
 }
 
-GtkWidget* uploadPreview(void*) {
+GtkWidget* uploadPreview(void* _) {
 	AUTO layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
 	gtk_box_set_homogeneous(layout, true);
 

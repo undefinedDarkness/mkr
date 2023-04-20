@@ -1,6 +1,6 @@
 #include "modes/modes-s.h"
 
-GtkWidget *helpPreview(Result*) {
+GtkWidget *helpPreview(Result*_) {
 	GtkWidget* layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0); CLASS(layout, "help-layout");
 	for (int i = 0; i < sizeof(modes)/sizeof(modes[0]); i++) {
 		AUTO mode = modes[i];
