@@ -2,6 +2,7 @@
 #define APP_MODE_H
 
 #include "mode.h"
+void app_clean(Result*);
 void app_generate(API);
 void app_execute(const char *, Result);
 

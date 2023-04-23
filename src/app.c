@@ -6,8 +6,6 @@ GResource *mkr_get_resource();
 static void init_resource() {
 	GResource *res = mkr_get_resource();
 	g_resources_register(res);
-	// GtkIconTheme *theme = gtk_icon_theme_get_default();
-	// gtk_icon_theme_add_resource_path (theme, "/undefinedDarkness/colr/icons");
 }
 
 int main(int argc, char **argv)

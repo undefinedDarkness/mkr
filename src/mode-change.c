@@ -21,7 +21,10 @@ static void modeItems(APP_MUT) {
   gtk_widget_show_all(app->ui.scroll);
 
   // Preview Code
-  gtk_widget_destroy(gtk_bin_get_child(app->ui.preview));
+  AUTO previewWidget = gtk_bin_get_child(app->ui.preview);
+  if (GTK_IS_WIDGET(previewWidget))
+	  gtk_widget_destroy(previewWidget);
+  
   if (app->currentMode.metadata.type & HAS_PREVIEW) {
     gtk_widget_show(app->ui.preview);
   } else {
@@ -58,28 +61,31 @@ static bool updateModeLabel(APP) {
 
 // TODO: Allow modes to implement their own cleanup
 // WARN: Dangerous if your memory isnt managed correctly
-static void modeItemCleanup(APP) {
-  return;
+static void modeItemCleanup(Mode prevMode, APP) {
   AUTO children = gtk_container_get_children(app->ui.display);
   AUTO head = children;
+  g_assert(prevMode.clean != NULL);
 
   while (children != NULL) {
     AUTO child = children->data;
-
-    children = children->next;
+    prevMode.clean(g_object_get_data(child, "__resptr"));
+	children = children->next;
   }
-  g_print("Finished cleaning\n");
-  g_list_free(children);
+  g_print("== SYS == Finished cleaning\n");
+  g_list_free_full(head, gtk_widget_destroy);
+  g_assert(GTK_IS_WIDGET(app->ui.display));
 }
 
 void modeInit(Mode prevMode, APP_MUT) {
-  // g_print("Changing mode to %s\n", app->currentMode.label);
+  g_print("== SYS == Changing mode to %s\n", app->currentMode.label);
   if (GTK_IS_WIDGET(app->ui.display)) {
-    if (prevMode.metadata.type & CLEAN)
-      modeItemCleanup(app);
-    gtk_container_remove(app->ui.scroll, app->ui.display);
-    // No references to app->ui.display anymore so itll die
-    app->ui.display = NULL;
+    if (prevMode.metadata.type & CLEAN) {
+		printf("== SYS == Calling cleaning function of %s\n", prevMode.label);
+		modeItemCleanup(prevMode, app);
+	}
+    /* gtk_widget_destroy(app->ui.display); */
+	gtk_container_remove(app->ui.scroll, app->ui.display);
+	app->ui.display = NULL;
   }
 
   enum ModeType type = app->currentMode.metadata.type;

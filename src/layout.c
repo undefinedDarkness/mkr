@@ -53,10 +53,13 @@ static void on_input_changed(GtkWidget *input, APP_MUT) {
   if (app->currentMode.metadata.type & CLEAR_ON_EDIT){
   
 	GList *children = gtk_container_get_children(app->ui.display);
+	GList* lh = children;
 	while (children != NULL) {
+		/* g_assert(GTK_IS_WIDGET(children->data)); */
 		gtk_widget_destroy(children->data); // TODO: hook into cleanup system
 		children = children->next;
 	}
+	g_list_free(lh);
 
 
   }

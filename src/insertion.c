@@ -5,7 +5,7 @@
 void async_insert_custom_item(GList * list, APP)
 {
 	AUTO display = app->ui.display;
-	AUTO head = list;
+	const AUTO head = list;
 	while (list != NULL) {
 		assert(GTK_IS_WIDGET(list->data));
 		AUTO row = gtk_list_box_row_new();
@@ -24,6 +24,7 @@ void async_insert_custom_item(GList * list, APP)
 // List of results..
 void async_insert_item(GList * list, APP)
 {
+	const AUTO lh = list;
 	// g_print("-- PUSHING ITEMS --\n");
 	AUTO display = app->ui.display;
 	Result *res = list->data;
@@ -79,5 +80,5 @@ void async_insert_item(GList * list, APP)
 	// for 1st label
 	gtk_widget_show_all(display);
 	gtk_list_box_set_sort_func(display, sort, app, NULL);
-	g_list_free(list);
+	g_list_free(lh);
 }

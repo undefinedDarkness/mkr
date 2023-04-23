@@ -14,10 +14,11 @@ const static Mode modes[] = {
          {
              .desc = "App Launcher",
              .symbol = "🚀",
-             .type = ITEMS,
+             .type = ITEMS | CLEAN,
          },
      .label = "APP",
      .key = 'r',
+	 .clean = app_clean,
      .generate = app_generate,
      .execute = app_execute},
     {.metadata = {.desc = "Upload to 0x0.st",
@@ -38,7 +39,7 @@ const static Mode modes[] = {
             &(struct CommandData){
                 .argv = (char *[1]){"locate $0 || find -name $0"},
                 .flags = FLAG_FILEPATH | FLAG_SHELL,
-                .workingDirectory = (void *)1 // g_get_home_dir()
+                .workingDirectory = 1
             },
         .execute = script_launch_file,
         .generate = script_generate,

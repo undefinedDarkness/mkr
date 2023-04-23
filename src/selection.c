@@ -14,24 +14,21 @@ void update_selected(int offset, APP)
 	}
 
 	AUTO selected = gtk_list_box_get_selected_row(display);
-	AUTO index = gtk_list_box_row_get_index(selected);
+	const bool isAnySelected = selected != NULL;
+	AUTO index = !isAnySelected ? 0 : gtk_list_box_row_get_index(selected);
 
 	int nindex = index + offset;
 	if (offset == 0xAA || index + offset < 0)
 		nindex = 0;
 	AUTO new = gtk_list_box_get_row_at_index(display, nindex);
 	gtk_widget_grab_focus(new);
-	gtk_list_box_unselect_row(display, selected);
+	if (isAnySelected)
+		gtk_list_box_unselect_row(display, selected);
 	gtk_list_box_select_row(display, new);
 
 	// TODO: Let mode do this async if preview takes a while eg: pdf
 	if (app->currentMode.metadata.type & HAS_PREVIEW)
 		display_preview(NULL, new, app);
-
-	// gtk_widget_grab_focus(app->ui.input);
-
-	// g_object_unref(selected);
-	// g_object_unref(new);
 }
 
 void display_preview(GtkWidget * listbox, GtkWidget * row, APP)

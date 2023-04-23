@@ -29,6 +29,9 @@ struct ScriptData {
   GDataInputStream *stream;
   State *app;
   struct CommandData *cmd;
+  GSubprocess *subprocess;
+  GSubprocessLauncher *launcher;
+  GInputStream *pipe;
 };
 static struct ScriptData state;
 
@@ -63,8 +66,10 @@ static void script_read_thread(GTask *task, GObject *source,
           res->label,
           td->cmd->workingDirectory != (void *)1 ? g_get_current_dir() : hDir);
 
-	  // Replace /home/$USER with ~ for cleaner output
-      res->label = g_strjoinv("~", g_strsplit(line, hDir, -1));
+      // Replace /home/$USER with ~ for cleaner output
+      AUTO b = g_strsplit(line,hDir,-1);
+	  res->label = g_strjoinv("~", b);
+	  g_strfreev(b);
     }
 
     GtkWidget *lbl = gtk_label_new(res->label);
@@ -101,8 +106,12 @@ static void script_read_cb(GObject *src, GAsyncResult *res,
   GList *list = script_read_finish(src, res, NULL);
 
   if (list == NULL) {
+	  //g_object_unref(data->stream);
+	  //g_object_unref(data->pipe);
+	  /* g_object_unref(data->subprocess); */
+	  //g_object_unref(data->launcher);
 #ifndef NDEBUG
-    g_print("Script: End of list\n");
+    g_print("== SCRIPT == Fin: End of list\n");
 #endif
     return;
   }
@@ -124,11 +133,7 @@ void script_generate(API) {
   const Mode self = app->currentMode; // rarely required but here it is ;-;
   const struct CommandData *cmdData = self.payload;
 
-  const char *cwd = cmdData->workingDirectory;
-  if (cwd == NULL)
-    cwd = g_get_current_dir();
-  else if (cwd == (void *)1)
-    cwd = g_get_home_dir();
+  const char *cwd = g_getenv("HOME");
 
 #define EQ(x) strncmp(x, cmdData->argv[i], sizeof(x)) == 0
   char **argv = (char **)g_slice_alloc(256); // space for 32 different arguments
@@ -154,25 +159,39 @@ void script_generate(API) {
 
 #undef EQ
 #ifndef NDEBUG
-  printf("Arguments: ");
+  printf("== SCRIPT == Working Directory: %s\n== SCRIPT == Arguments: ", cwd);
   int i = 0;
   while (argv[i] != NULL) {
-    printf("%s\t", argv[i]);
+    printf("%s,", argv[i]);
     i++;
   }
   printf("\n");
 #endif
 
   // -- Process And Pipe Creation --
-  AUTO procLauncher = g_subprocess_launcher_new(G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+  GSubprocessLauncher* procLauncher = g_subprocess_launcher_new(G_SUBPROCESS_FLAGS_STDOUT_PIPE);
   g_subprocess_launcher_set_cwd(procLauncher, cwd);
-  AUTO process = g_subprocess_launcher_spawnv(procLauncher, argv, NULL);
+  GError* err = NULL;
+  GSubprocess* process = g_subprocess_launcher_spawnv(procLauncher, argv, &err);
+ 
+	if (process == NULL) {
+		printf("== SCRIPT == Failed to launch subprocess: %s\n", err->message);
+		return;
+	}
+
+  g_assert(G_IS_SUBPROCESS_LAUNCHER(procLauncher));
+  g_assert(G_IS_SUBPROCESS(process));
 
   // Initialize global state
   state.app = app;
   state.cmd = cmdData;
-  state.stream = g_data_input_stream_new(g_subprocess_get_stdout_pipe(process));
+  state.pipe = g_subprocess_get_stdout_pipe(process);
+  state.stream = g_data_input_stream_new(state.pipe);
+	state.launcher = procLauncher;
+	state.subprocess = process;
 
   g_subprocess_wait_async(process, NULL, script_wait_cb, api);
   script_read_async(script_read_cb, &state);
+	/* g_free(cwd); */
+	g_slice_free1(256, argv);
 }
