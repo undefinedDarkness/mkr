@@ -11,6 +11,7 @@ void async_insert_custom_item(GList * list, APP)
 		AUTO row = gtk_list_box_row_new();
 		Result *res = g_object_get_data(list->data, "__resptr");
 		assert(res != NULL);
+		/* printf("Result from custom element: %s %p %p %d\n", res->label, res->metadata, res->icon, res->id); */
 		g_object_set_data(row, "__resptr", res);
 		g_object_set_data(row, "__label", res->label);
 		ADD(row, list->data);
@@ -19,17 +20,20 @@ void async_insert_custom_item(GList * list, APP)
 	}
 	gtk_widget_show_all(display);
 	g_list_free(head);
+	printf("Finished adding custom elements\n");
 }
 
 // List of results..
 void async_insert_item(GList * list, APP)
 {
 	const AUTO lh = list;
-	// g_print("-- PUSHING ITEMS --\n");
+	assert(list != NULL);
+	
 	AUTO display = app->ui.display;
-	Result *res = list->data;
-	assert(res != NULL);
 	gtk_list_box_set_sort_func(display, NULL, NULL, NULL);
+	
+	Result *res = list->data;
+	assert(res != NULL); assert(res->label != NULL);
 
 	AUTO item = gtk_list_box_row_new();
 	g_object_set_data(item, "__resptr", res);

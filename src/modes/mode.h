@@ -10,6 +10,8 @@ typedef struct {
   int id;
 } Result;
 
+static Result flagResult = {0,0,0,-1};
+
 struct State;
 typedef struct {
   void (*update_progress)(float v, struct State *);
@@ -27,7 +29,8 @@ enum ModeType {
   ITEMS = 2,
   CLEAN = 8,        // can clean up after itself
   HAS_PREVIEW = 16, // this will give a preview widget
-  CLEAR_ON_EDIT = 128, // clear items on edit and disable builtin search entirely..?
+  CLEAR_ON_EDIT =
+      128, // clear items on edit and disable builtin search entirely..?
 
   ONLY_PREVIEW = 32,  // no items to display, no commands to pass
   UPDATE_ON_EDIT = 64 // call generate() when search is updated...
@@ -35,26 +38,26 @@ enum ModeType {
 
 typedef struct {
   struct {
-     char *symbol;
- char *desc;
-     enum ModeType type; // Flags + Type go here
+    char *symbol;
+    char *desc;
+    enum ModeType type; // Flags + Type go here
   } metadata;
 
-   char *label;   // Must be uppercase and unique
+  char *label;   // Must be uppercase and unique
   void *payload; // any data
-   char key;      // activation key
-  // Preview
-   GtkWidget *(*preview)(Result *);
+  char key;      // activation key
+                 // Preview
+  GtkWidget *(*preview)(Result *);
 
-   void (*generate)(API);
+  void (*generate)(API);
 
   union {
-     void (*execute)(const char *, Result);      // Type = ITEMS
-     void (*execute_command)(const char *, API); // Type = COMMAND
+    void (*execute)(const char *, Result);      // Type = ITEMS
+    void (*execute_command)(const char *, API); // Type = COMMAND
   };
 
   // Housekeeping
-   void (*clean)(Result *);
+  void (*clean)(Result *);
 
 } Mode;
 
