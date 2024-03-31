@@ -1,5 +1,1 @@
-builddir
-resources/*.c
-resources/*.h
-build
-dbg
+.cache
