@@ -62,13 +62,16 @@ static bool updateModeLabel(APP) {
 // TODO: Allow modes to implement their own cleanup
 // WARN: Dangerous if your memory isnt managed correctly
 static void modeItemCleanup(Mode prevMode, APP) {
+  g_print("== SYS == Cleaning Up Individiually\n");
   AUTO children = gtk_container_get_children(app->ui.display);
   AUTO head = children;
   g_assert(prevMode.clean != NULL);
 
   while (children != NULL) {
     AUTO child = children->data;
-    prevMode.clean(g_object_get_data(child, "__resptr"));
+	Result* res = g_object_get_data(child, "__resptr");
+    if (!(res->flags & NO_CLEANUP))
+			prevMode.clean(res);
 	children = children->next;
   }
   g_print("== SYS == Finished cleaning\n");

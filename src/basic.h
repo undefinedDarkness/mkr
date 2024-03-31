@@ -2,8 +2,6 @@
 #define BASIC_H
 
 #include <gtk/gtk.h>
-//#include <stdbool.h>
-typedef gboolean bool;
 #define true 1
 #define false 0
 #define AUTO __auto_type

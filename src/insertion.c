@@ -11,7 +11,7 @@ void async_insert_custom_item(GList * list, APP)
 		AUTO row = gtk_list_box_row_new();
 		Result *res = g_object_get_data(list->data, "__resptr");
 		assert(res != NULL);
-		/* printf("Result from custom element: %s %p %p %d\n", res->label, res->metadata, res->icon, res->id); */
+		printf("Result from custom element: %x %s %p %p %d\n", res->flags, res->label, res->metadata, res->icon, res->id);
 		g_object_set_data(row, "__resptr", res);
 		g_object_set_data(row, "__label", res->label);
 		ADD(row, list->data);

@@ -3,11 +3,16 @@
 
 #include "../basic.h"
 
+enum ResultFlags {
+	NO_CLEANUP
+};
+
 typedef struct {
   const char *label;
   GIcon *icon; // gtk specific
   void *metadata;
-  int id;
+  int flags;
+  unsigned int id;
 } Result;
 
 static Result flagResult = {0,0,0,-1};
