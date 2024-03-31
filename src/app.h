@@ -26,12 +26,14 @@ typedef struct {
 #define APP const State *const app
 #define APP_MUT State *const app
 
- void async_update_progress(float v, void *ptr);
+void async_update_progress(float v, void *ptr);
 void modeInit(Mode, APP_MUT);
 void execute(APP);
 int sort(GtkWidget*a,GtkWidget*b,APP);
 void scaffold(GtkWidget*, APP_MUT);
- void display_preview(GtkWidget *listbox, GtkWidget *row, APP);
+void display_preview(GtkWidget *listbox, GtkWidget *row, APP);
+
+bool toggle_display(void* __x);
 
 // void async_insert_item_single(struct { Result res; APP;  }*i);
 void async_insert_item(GList* list, APP);

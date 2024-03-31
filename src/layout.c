@@ -8,7 +8,11 @@
 
 static bool on_window_key_press(GtkWidget *window, GdkEventKey *key, APP) {
   if (key->keyval == GDK_KEY_Escape) {
-    QUIT();
+    if (!g_key_file_get_boolean(app->config, "OPERATION", "daemonMode", NULL)) {
+		QUIT();
+} else {
+		toggle_display(0);	
+		}
   }
 
   return false;

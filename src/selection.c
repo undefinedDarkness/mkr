@@ -18,7 +18,7 @@ void update_selected(int offset, APP)
 	AUTO index = !isAnySelected ? 0 : gtk_list_box_row_get_index(selected);
 
 	int nindex = index + offset;
-	if (offset == 0xAA || index + offset < 0)
+	if (offset == 0xAA || index + offset < 0) // What the fuck am I reading?
 		nindex = 0;
 	AUTO new = gtk_list_box_get_row_at_index(display, nindex);
 	gtk_widget_grab_focus(new);
