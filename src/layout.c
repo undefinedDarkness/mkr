@@ -82,7 +82,28 @@ static void on_input_focus_lost(GtkWidget *input, GdkEventFocus event,
   gtk_widget_grab_focus(input);
 }
 
-void scaffold(GtkWidget *window, APP_MUT) {
+// NOTE: Maybe this function could be gotten from a loaded library to allow custom libraries.
+void layout_rofi(GtkWidget *window, APP_MUT) {
+
+/*
+ *   | LAYOUT ---------------------------------------------- |
+ *   |                                                       |
+ *   | | HEADER ---------------------| PREVIEW ----------- | |
+ *   | |                             |                     | |
+ *   | | | MODE | INPUT -----------| |                     | |
+ *   | | | XXX | XXXXXXXXXXXXXXXXX | |                     | |
+ *   | | |-------------------------| |                     | |
+ *   | |-----------------------------|                     | |
+ *   |                               |                     | |
+ *   | | CONTENTS -------------------|                     | |
+ *   | |                             |                     | |
+ *   | | *** CONTENTS DETERMINED BY  |                     | |
+ *   | | *** CURRENTLY ACTIVE MODE   |                     | |
+ *   | |-----------------------------|---------------------| |
+ *   |                                
+ *   |-------------------------------------------------------|
+ * */
+
   g_signal_connect(window, "key-press-event", on_window_key_press, app);
   // AUTO windowLayout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
   // ADD(window, windowLayout);

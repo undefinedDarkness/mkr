@@ -68,7 +68,16 @@ int main(int argc, char **argv)
 	GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_decorated(window, FALSE);
 	gtk_window_set_type_hint(window, GDK_WINDOW_TYPE_HINT_DESKTOP);
-	gtk_window_set_position(window, GTK_WIN_POS_CENTER_ALWAYS);
+
+	AUTO windowPosition = GTK_WIN_POS_NONE;
+	AUTO userWindowPosition = C_GET("WINDOW", "position", string, "NONE");
+	if (g_ascii_strcasecmp(userWindowPosition, "CENTER")) {
+		windowPosition = GTK_WIN_POS_CENTER_ALWAYS;
+	} else if (g_ascii_strcasecmp(userWindowPosition, "MOUSE")) {
+		windowPosition = GTK_WIN_POS_MOUSE;
+	}
+
+	gtk_window_set_position(window, windowPosition);
 	gtk_window_set_keep_above(window, TRUE);
 
 	g_signal_connect(window, "destroy", gtk_main_quit, NULL);

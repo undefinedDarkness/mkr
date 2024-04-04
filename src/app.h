@@ -41,7 +41,7 @@ void async_insert_custom_item(GList *list, APP);
 // void sort_display(APP_MUT);
 void update_selected(int new, APP);
 
-#define C_GET(g, k, type, default) g_key_file_has_key(app->config, g, k, NULL) ? g_key_file_get_##type(app->config, g, k, NULL) : default
+#define C_GET(g, k, type, default) (g_key_file_has_key(app->config, g, k, NULL) ? g_key_file_get_##type(app->config, g, k, NULL) : default)
 
 #define CLASS(w, c) gtk_style_context_add_class(gtk_widget_get_style_context(w), c);
 #define QUIT g_print("%s:%d is quitting\n", __FILE__, __LINE__);gtk_main_quit
