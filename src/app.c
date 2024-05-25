@@ -38,12 +38,13 @@ static bool createOrCheckForPidFile() {
 	fp = fopen("/tmp/mkr-pidfile", "w");
 	fprintf(fp, "%d", getpid());
 	fclose(fp);
-	
+
 	return false;
 }
 
 int main(int argc, char **argv)
 {
+	// TODO: Deal with config & style files not existing (Copy)
 	if (createOrCheckForPidFile())
 		return 0;
 	gtk_init(&argc, &argv);
@@ -60,8 +61,13 @@ int main(int argc, char **argv)
 	app->search = "";
 	app->selectedItem = -1;
 	app->config = g_key_file_new();
-	g_key_file_load_from_file(app->config, "config.ini", G_KEY_FILE_NONE,
-	NULL);
+
+	AUTO userConfigPath = g_get_user_config_dir();
+	AUTO userConfigFile = g_build_path("/", userConfigPath, "mkr", "config.ini", NULL);
+
+	printf("Loading configuration from %s\n", userConfigFile);
+	g_key_file_load_from_file(app->config, userConfigFile, G_KEY_FILE_NONE,
+						   NULL);
 
 	// run_tests();
 
@@ -71,12 +77,13 @@ int main(int argc, char **argv)
 
 	AUTO windowPosition = GTK_WIN_POS_NONE;
 	AUTO userWindowPosition = C_GET("WINDOW", "position", string, "NONE");
-	if (g_ascii_strcasecmp(userWindowPosition, "CENTER")) {
+	if (g_ascii_strcasecmp(userWindowPosition, "CENTER") == 0) {
 		windowPosition = GTK_WIN_POS_CENTER_ALWAYS;
-	} else if (g_ascii_strcasecmp(userWindowPosition, "MOUSE")) {
+	} else if (g_ascii_strcasecmp(userWindowPosition, "MOUSE") == 0) {
 		windowPosition = GTK_WIN_POS_MOUSE;
 	}
 
+	printf("Setting window position to %d\n", windowPosition);
 	gtk_window_set_position(window, windowPosition);
 	gtk_window_set_keep_above(window, TRUE);
 
@@ -91,11 +98,19 @@ int main(int argc, char **argv)
 
 	/*== Window Styling ==*/
 	AUTO cssProvider = gtk_css_provider_new();
+	AUTO cssFilePath = g_build_path("/", userConfigPath, "mkr", "user.css", NULL);
+
 	gtk_css_provider_load_from_resource(cssProvider, "/undefinedDarkness/mkr/style.css");
-	// gtk_css_provider_load_from_file(cssProvider,
-	// g_file_new_for_path("style.css"), NULL);
 	gtk_style_context_add_provider_for_screen(screen, cssProvider,
 										   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+	cssProvider = gtk_css_provider_new();
+	gtk_css_provider_load_from_file(cssProvider,
+								 g_file_new_for_path(cssFilePath), NULL);
+	gtk_style_context_add_provider_for_screen(screen, cssProvider,
+										   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+
 
 	//== SETUP MODES ==
 	AUTO modeLabel = C_GET("MODE", "default", string, "APP");

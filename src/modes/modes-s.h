@@ -21,6 +21,7 @@ const static Mode modes[] = {
 	 .clean = app_clean,
      .generate = app_generate,
      .execute = app_execute},
+
     {.metadata = {.desc = "Upload to 0x0.st",
                   .symbol = "U",
                   .type = ONLY_PREVIEW},
@@ -39,7 +40,7 @@ const static Mode modes[] = {
             &(struct CommandData){
                 .argv = (char *[1]){"locate $0 || find -name $0"},
                 .flags = FLAG_FILEPATH | FLAG_SHELL,
-                .workingDirectory = 1
+                .workingDirectory = (void*)1
             },
         .execute = script_launch_file,
         .generate = script_generate,

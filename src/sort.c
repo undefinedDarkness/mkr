@@ -4,7 +4,7 @@
 #include "../lib/match.h"
 
 
-int sort(GtkWidget * rowA, GtkWidget * rowB, APP)
+int fuzzy_sort_by_label(GtkWidget * rowA, GtkWidget * rowB, APP)
 {	
 	const char *a = g_object_get_data(rowA, "__label");
 	const char *b = g_object_get_data(rowB, "__label");

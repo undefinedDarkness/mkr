@@ -47,7 +47,7 @@ static void script_read_thread(GTask *task, GObject *source,
     // line = g_data_input_stream_read_line(td->stream, &len, NULL, NULL);
     Result *res = g_slice_alloc0(sizeof(Result));
     res->label = line;
-    GtkWidget *obj = gtk_list_box_row_new();
+    GtkWidget *obj = gtk_flow_box_child_new();
     g_object_set_data(obj, "__resptr", res);
     g_object_set_data(obj, "__label", line);
     AUTO layout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);

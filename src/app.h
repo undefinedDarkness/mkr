@@ -29,7 +29,7 @@ typedef struct {
 void async_update_progress(float v, void *ptr);
 void modeInit(Mode, APP_MUT);
 void execute(APP);
-int sort(GtkWidget*a,GtkWidget*b,APP);
+int fuzzy_sort_by_label(GtkWidget*a,GtkWidget*b,APP);
 void scaffold(GtkWidget*, APP_MUT);
 void display_preview(GtkWidget *listbox, GtkWidget *row, APP);
 

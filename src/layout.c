@@ -72,7 +72,7 @@ static void on_input_changed(GtkWidget *input, APP_MUT) {
   }
   if (app->currentMode.metadata.type & ITEMS) {
   app->search = gtk_entry_get_text(input);
-  gtk_list_box_invalidate_sort(app->ui.display);
+  gtk_flow_box_invalidate_sort(app->ui.display);
   update_selected(0xAA, app);
   }
 }
@@ -146,4 +146,61 @@ void layout_rofi(GtkWidget *window, APP_MUT) {
                  .mode = mode,
                  .preview = preview,
                  .display = NULL};
+}
+
+
+// NOTE: Maybe this function could be gotten from a loaded library to allow custom libraries.
+void layout_dmenu(GtkWidget *window, APP_MUT) {
+  g_signal_connect(window, "key-press-event", on_window_key_press, app);
+  // AUTO windowLayout = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+  // ADD(window, windowLayout);
+
+  AUTO layout = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+  CLASS(layout, "layout");
+
+  AUTO preview = gtk_frame_new(""); // gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+  CLASS(preview, "preview");
+  gtk_frame_set_shadow_type(preview, GTK_SHADOW_NONE);
+  // gtk_box_pack_end(windowLayout, preview, true, true, 0);
+
+  AUTO header = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+  CLASS(header, "header");
+
+  AUTO mode = gtk_label_new("");
+  CLASS(mode, "mode");
+  ADD(header, mode);
+
+  AUTO input = gtk_entry_new();
+  g_signal_connect(input, "key-press-event", on_input_key_press, app);
+  g_signal_connect(input, "changed", on_input_changed, app);
+  g_signal_connect(input, "focus-out-event", on_input_focus_lost, NULL);
+  gtk_box_pack_start(header, input, true, true, 0);
+  ADD(layout, header);
+
+  AUTO contents = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+  ADD(contents, layout);
+
+  AUTO scroll = gtk_scrolled_window_new(NULL, NULL);
+  CLASS(scroll, "items-viewport");
+  ADD(layout, scroll);
+
+  ADD(contents, preview);
+  ADD(window, contents);
+
+  app->ui = (UI){.window = window,
+                 .scroll = scroll,
+                 .input = input,
+                 .mode = mode,
+                 .preview = preview,
+                 .display = NULL};
+}
+
+void scaffold(GtkWidget *window, APP_MUT) {
+	const AUTO userLayout = C_GET("WINDOW", "layout", string, "rofi");
+	printf("== LAYOUT == Using layout: %s", userLayout);
+	if (g_ascii_strcasecmp(userLayout, "rofi") == 0) {
+		layout_rofi(window, app);
+	} else if (g_ascii_strcasecmp(userLayout, "rofi") == 0) {
+		layout_dmenu(window, app);
+	}
 }

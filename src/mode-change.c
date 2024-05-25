@@ -2,18 +2,22 @@
 #include "modes/mode.h"
 #include "modes/modes-s.h"
 
+// Setup `display` to be a ListBox (rofi) or a box (dmenu)
 static void modeItems(APP_MUT) {
-  AUTO display = gtk_list_box_new();
-  gtk_list_box_set_sort_func(display, (app->currentMode.metadata.type & CLEAR_ON_EDIT) ? NULL : sort, app, NULL);
-  gtk_list_box_set_selection_mode(display, GTK_SELECTION_SINGLE);
+  AUTO display = gtk_flow_box_new();
+
+	// If items are cleared after every edit then don't sort, App will do that
+  gtk_flow_box_set_sort_func(display, (app->currentMode.metadata.type & CLEAR_ON_EDIT) ? NULL : fuzzy_sort_by_label, app, NULL);
+  gtk_flow_box_set_selection_mode(display, GTK_SELECTION_SINGLE);
   CLASS(display, "display");
 
   if (app->currentMode.metadata.type & HAS_PREVIEW) {
-    g_signal_connect(display, "row-activated", display_preview, app);
+    g_signal_connect(display, "child-activated", display_preview, app);
   }
   ADD(app->ui.scroll, display);
   app->ui.display = display;
 
+	// TODO: Display warning instead of crashing
   g_assert_nonnull(app->currentMode.generate);
   app->currentMode.generate(&app->api);
 

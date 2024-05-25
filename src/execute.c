@@ -32,7 +32,7 @@ void execute(APP)
 	}
 
 	if (type & ITEMS) {
-		AUTO selected = gtk_list_box_get_selected_row(app->ui.display);
+		AUTO selected = gtk_flow_box_get_selected_children(app->ui.display)->data; // NOTE: This list could be empty, but execute can assume it is non-null
 		Result *result = g_object_get_data(selected, "__resptr");
 		char*label = g_object_get_data(selected,"__label");
 		g_assert(label!=NULL);
