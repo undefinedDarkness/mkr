@@ -1,4 +1,5 @@
 #include "app.h"
+#include <glib-unix.h>
 #include "gtk/gtkcssprovider.h"
 #include "modes/modes-s.h"
 

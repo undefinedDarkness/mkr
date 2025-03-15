@@ -15,8 +15,11 @@
     along with Wofi.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define _GNU_SOURCE
 #include <math.h>
+#include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "match.h"
 
 #define SCORE_MAX INFINITY
