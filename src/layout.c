@@ -197,7 +197,7 @@ void layout_dmenu(GtkWidget *window, APP_MUT) {
 
 void scaffold(GtkWidget *window, APP_MUT) {
 	const AUTO userLayout = C_GET("WINDOW", "layout", string, "rofi");
-	printf("== LAYOUT == Using layout: %s", userLayout);
+	printf("== LAYOUT == Using layout: %s\n", userLayout);
 	if (g_ascii_strcasecmp(userLayout, "rofi") == 0) {
 		layout_rofi(window, app);
 	} else if (g_ascii_strcasecmp(userLayout, "rofi") == 0) {

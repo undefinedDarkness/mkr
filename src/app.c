@@ -1,7 +1,9 @@
 #include "app.h"
 #include <glib-unix.h>
+#include "glib.h"
 #include "gtk/gtkcssprovider.h"
 #include "modes/modes-s.h"
+#include "src/basic.h"
 
 State app_val;
 
@@ -46,6 +48,45 @@ static bool createOrCheckForPidFile() {
 int main(int argc, char **argv)
 {
 	// TODO: Deal with config & style files not existing (Copy)
+	GError *error = NULL;
+	GOptionContext *context;
+	gboolean show_help = FALSE;
+	gboolean show_version = FALSE;
+	bool open_inspector = false;
+
+	GOptionEntry entries[] = {
+		{ "help", 'h', 0, G_OPTION_ARG_NONE, &show_help, "Show help message", NULL },
+		{ "version", 'v', 0, G_OPTION_ARG_NONE, &show_version, "Show application version", NULL },
+		{ "inspect", 0, 0, G_OPTION_ARG_NONE, &open_inspector, "Open inspector", NULL },
+		{ NULL }
+	};
+
+	context = g_option_context_new("- application options");
+	g_option_context_add_main_entries(context, entries, NULL);
+	g_option_context_parse(context, &argc, &argv, &error);
+
+	if (error != NULL) {
+		g_printerr("Option parsing failed: %s\n", error->message);
+		g_error_free(error);
+		exit(1);
+	}
+
+	if (show_help) {
+		g_print("%s\n", g_option_context_get_help(context, TRUE, NULL));
+		exit(0);
+	}
+
+	if (show_version) {
+		g_print("Application version: 1.0.0\n");
+		exit(0);
+	}
+
+	if (open_inspector) {
+		g_setenv("GTK_DEBUG", "interactive", true);
+	}
+
+	g_option_context_free(context);
+
 	if (createOrCheckForPidFile())
 		return 0;
 	gtk_init(&argc, &argv);
@@ -79,12 +120,13 @@ int main(int argc, char **argv)
 	AUTO windowPosition = GTK_WIN_POS_NONE;
 	AUTO userWindowPosition = C_GET("WINDOW", "position", string, "NONE");
 	if (g_ascii_strcasecmp(userWindowPosition, "CENTER") == 0) {
+		printf("Centering window\n");
 		windowPosition = GTK_WIN_POS_CENTER_ALWAYS;
 	} else if (g_ascii_strcasecmp(userWindowPosition, "MOUSE") == 0) {
+		printf ("Positioning window at mouse\n");
 		windowPosition = GTK_WIN_POS_MOUSE;
 	}
 
-	printf("Setting window position to %d\n", windowPosition);
 	gtk_window_set_position(window, windowPosition);
 	gtk_window_set_keep_above(window, TRUE);
 
