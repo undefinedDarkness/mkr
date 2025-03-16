@@ -19,8 +19,11 @@ typedef struct {
 	const GKeyFile *restrict config;
 	Mode currentMode;
 	int selectedItem;
-	 Api_t api;
+	Api_t api;
 	char*restrict search;
+	struct {
+		int visibleItems;
+	} userdata;
 } State;
 
 #define APP const State *const app
@@ -30,8 +33,10 @@ void async_update_progress(float v, void *ptr);
 void modeInit(Mode, APP_MUT);
 void execute(APP);
 int fuzzy_sort_by_label(GtkWidget*a,GtkWidget*b,APP);
+bool fuzzy_filter_by_label(GtkWidget *a, APP_MUT);
 void scaffold(GtkWidget*, APP_MUT);
 void display_preview(GtkWidget *listbox, GtkWidget *row, APP);
+void on_input_changed(GtkWidget *input, APP_MUT);
 
 bool toggle_display(void* __x);
 

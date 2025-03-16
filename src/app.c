@@ -1,6 +1,7 @@
 #include "app.h"
 #include <glib-unix.h>
 #include "glib.h"
+#include "gtk/gtk.h"
 #include "gtk/gtkcssprovider.h"
 #include "modes/modes-s.h"
 #include "src/basic.h"
@@ -176,6 +177,8 @@ int main(int argc, char **argv)
 	// window_on_screen_changed(window, NULL, NULL);
 
 	gtk_window_present(window);
+	gtk_window_resize(window, 1, 1);
+	on_input_changed(app->ui.input, app);
 
 	gtk_widget_grab_focus(app->ui.input);
 

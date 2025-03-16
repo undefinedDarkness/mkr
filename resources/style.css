@@ -12,11 +12,12 @@
 /* Rounded Corners */
 
 .header label {
-	border-radius: 16px 0 0 0;
+	/* border-radius: 16px 0 0 0; */
 }
 
 .header entry {
-	border-radius: 0 16px 0 0;
+	border-radius: 0px;
+	/* border-radius: 0 16px 0 0; */
 	min-width: 350px; 
 	font-family: "Input Mono";
 	outline: 0;
@@ -35,7 +36,7 @@ progressbar, progress, trough {
 window {
 	font-size: 24px;
 	font-family: "Helvetica Now Text";
-	border-radius: 16px;
+	/* border-radius: 16px; */
 }
 
 window,.layout {
@@ -80,6 +81,7 @@ background-color: #434c5e;
 
 * {
 	color: #eceff4;	
+	/* border: 1px red solid; */
 }
 
 .header label.APP {
@@ -116,7 +118,7 @@ background-color: #434c5e;
 }
 
 .dashboard-launcher {
-	border-radius: 8px;
+	/* border-radius: 8px; */
 	background: #3b4252;
 	margin: 8px;
 }

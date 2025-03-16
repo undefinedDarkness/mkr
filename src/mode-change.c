@@ -1,4 +1,5 @@
 #include "app.h"
+#include "gtk/gtk.h"
 #include "modes/mode.h"
 #include "modes/modes-s.h"
 
@@ -7,7 +8,8 @@ static void modeItems(APP_MUT) {
   AUTO display = gtk_flow_box_new();
 
 	// If items are cleared after every edit then don't sort, App will do that
-  gtk_flow_box_set_sort_func(display, (app->currentMode.metadata.type & CLEAR_ON_EDIT) ? NULL : fuzzy_sort_by_label, app, NULL);
+  // gtk_flow_box_set_sort_func(display, (app->currentMode.metadata.type & CLEAR_ON_EDIT) ? NULL : fuzzy_sort_by_label, app, NULL);
+  gtk_flow_box_set_filter_func(display, (app->currentMode.metadata.type & CLEAR_ON_EDIT) ? NULL : fuzzy_filter_by_label, app, NULL);
   gtk_flow_box_set_selection_mode(display, GTK_SELECTION_SINGLE);
   CLASS(display, "display");
 

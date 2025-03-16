@@ -29,6 +29,7 @@ void execute(APP)
 	if (app->currentMode.execute == NULL) {
 		g_error("Invalid execute provided by %s\n",
 			app->currentMode.label);
+		return;
 	}
 
 	if (type & ITEMS) {

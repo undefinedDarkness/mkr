@@ -1,5 +1,7 @@
 #include "app.h"
+#include "gtk/gtk.h"
 #include <assert.h>
+#include <time.h>
 
 // List of custom widgets
 void async_insert_custom_item(GList * list, APP)
@@ -31,6 +33,7 @@ void async_insert_item(GList * list, APP)
 	
 	AUTO display = app->ui.display;
 	gtk_flow_box_set_sort_func(display, NULL, NULL, NULL);
+	gtk_flow_box_set_filter_func(display, NULL, NULL, NULL);
 	
 	Result *res = list->data;
 	assert(res != NULL); assert(res->label != NULL);
@@ -83,6 +86,7 @@ void async_insert_item(GList * list, APP)
 
 	// for 1st label
 	gtk_widget_show_all(display);
-	gtk_flow_box_set_sort_func(display, fuzzy_sort_by_label, app, NULL);
+	// gtk_flow_box_set_sort_func(display, fuzzy_sort_by_label, app, NULL);
+	gtk_flow_box_set_filter_func(display, fuzzy_filter_by_label, app, NULL);
 	g_list_free(lh);
 }
